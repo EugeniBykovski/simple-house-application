@@ -6,6 +6,5 @@ module.exports = {
   extends: ["jira"],
   rules: {
     "jira-type-type-enum": [2, "always", ["feat", "fix"]],
-    "jira-task-id-empty": true,
   },
 };
