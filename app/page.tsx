@@ -4,7 +4,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher/LanguageSwitcher";
 const Home: FC = memo(() => {
   return (
     <>
-      Portal
+      Portal Layout
       <LanguageSwitcher />
     </>
   );
