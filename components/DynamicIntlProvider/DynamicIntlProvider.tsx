@@ -9,7 +9,7 @@ export const DynamicIntlProvider: FC<{ children: React.ReactNode }> = ({
 }) => {
   const { locale, messages } = useLanguage();
   return (
-    <NextIntlClientProvider messages={messages} locale={locale}>
+    <NextIntlClientProvider messages={messages} locale={locale} timeZone="UTC">
       {children}
     </NextIntlClientProvider>
   );
