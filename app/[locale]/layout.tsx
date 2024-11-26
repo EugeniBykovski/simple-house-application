@@ -11,7 +11,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
-
 const locales = ["en", "ru"];
 
 export const metadata: Metadata = {

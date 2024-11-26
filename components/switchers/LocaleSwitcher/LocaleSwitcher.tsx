@@ -11,21 +11,8 @@ import { LoadingState } from "@/components/ui/loadingState";
 import { useLocale, useTranslations } from "next-intl";
 import { HoverCard, HoverCardContent } from "@/components/ui/hover-card";
 import { useChangeLocale } from "@/hooks/useChangeLocale";
-
-interface Props {
-  variant?:
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link"
-    | null;
-  size?: "default" | "sm" | "lg" | "icon" | null;
-  alignHover?: "center" | "start" | "end";
-  alignDropdown?: "center" | "start" | "end";
-  textSize?: "text-lg" | "text-base";
-}
+import { LocaleSwitcherProps } from "./types";
+import { locales } from "./constants";
 
 export const LocaleSwitcher = ({
   size = "default",
@@ -33,9 +20,8 @@ export const LocaleSwitcher = ({
   alignHover = "center",
   alignDropdown = "center",
   textSize = "text-base",
-}: Props) => {
+}: LocaleSwitcherProps) => {
   const locale = useLocale();
-
   const t = useTranslations("common");
 
   const { isLoading, onSelectChange } = useChangeLocale();
@@ -59,22 +45,17 @@ export const LocaleSwitcher = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align={alignDropdown}>
-          <DropdownMenuItem
-            onClick={() => {
-              onSelectChange("ru");
-            }}
-            className="cursor-pointer"
-          >
-            RU
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              onSelectChange("en");
-            }}
-            className="cursor-pointer"
-          >
-            EN
-          </DropdownMenuItem>
+          {locales.map(({ code, label }) => (
+            <DropdownMenuItem
+              key={code}
+              onClick={() => {
+                onSelectChange(code);
+              }}
+              className="cursor-pointer"
+            >
+              {label}
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
       <HoverCardContent align={alignHover}>
