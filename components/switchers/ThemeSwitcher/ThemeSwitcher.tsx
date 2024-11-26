@@ -1,16 +1,16 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
-import { HoverCard } from "../ui/hover-card";
 import { HoverCardContent } from "@radix-ui/react-hover-card";
+import { HoverCard } from "@/components/ui/hover-card";
 
 interface Props {
   variant?:

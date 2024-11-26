@@ -8,7 +8,6 @@ import { Suspense } from "react";
 import { DynamicIntlProvider } from "@/providers/DynamicIntlProvider/DynamicIntlProvider";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageProvider";
-import Header from "@/components/Header/Header";
 import { ThemeProvider } from "@/providers/ThemeProvider/ThemeProvider";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
@@ -46,7 +45,6 @@ export default function RootLayout({
                 disableTransitionOnChange
               >
                 <ToastContainer position="bottom-right" />
-                <Header />
                 <main className="w-[100%] mx-auto gap-x-2 min-h-[calc(100vh-3.5rem-1px)] my-4 container text-center">
                   {children}
                 </main>

@@ -1,16 +1,17 @@
 "use client";
 
 import { FC } from "react";
+
+import { supportedLocales } from "@/data/mock-data";
+import { AvailableLocales } from "@/app/i18n/translations";
+import { useLanguage } from "@/context/LanguageProvider";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { supportedLocales } from "@/data/mock-data";
-import { AvailableLocales } from "@/app/i18n/translations";
-import { useLanguage } from "@/context/LanguageProvider";
+} from "@/components/ui/select";
 
 const LanguageSwitcher: FC = () => {
   const { locale, changeLanguage } = useLanguage();
@@ -18,7 +19,7 @@ const LanguageSwitcher: FC = () => {
   return (
     <Select
       value={locale}
-      onValueChange={(value) => changeLanguage(value as AvailableLocales)}
+      onValueChange={(value: any) => changeLanguage(value as AvailableLocales)}
     >
       <SelectTrigger className="p-2 focus:ring-0 bg-[#f06060] text-white rounded">
         <SelectValue placeholder={locale.toUpperCase()} />
