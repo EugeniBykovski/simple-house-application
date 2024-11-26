@@ -1,0 +1,90 @@
+{
+  "auth": {
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "USERNAME": "Username",
+    "SIGN_IN": {
+      "TITLE": "Sign in",
+      "DESC": "Welcome back to ....",
+      "SUBMIT_BTN": "Sign in",
+      "FORGOT_PASSWORD": "Forgot password?",
+      "DONT_HAVE_ACCOUNT": {
+        "FIRST": "Don't have an account?",
+        "SECOND": "Sign up"
+      },
+      "PROVIDERS": {
+        "GOOGLE": "Sign in with Google"
+      }
+    },
+    "SIGN_UP": {
+      "TITLE": "Sign up",
+      "DESC": "Create your account",
+      "SUBMIT_BTN": "Sign up",
+      "FORGOT_PASSWORD": "Forgot password?",
+      "HAVE_ACCOUNT": {
+        "FIRST": "Already have an account?",
+        "SECOND": "Sign in"
+      },
+      "TERMS": {
+        "FIRST": "By signing up you agree to our",
+        "SECOND": "Terms of Service"
+      },
+      "PROVIDERS": {
+        "GOOGLE": "Sign up with Google"
+      }
+    }
+  },
+  "messages": {
+    "ERRORS": {
+      "DEFAULT": "Oh no..Something went wrong. Please try again",
+      "TAKEN_USERNAME": "This username is already taken",
+      "TAKEN_EMAIL": "This email is already in use...",
+      "DB_ERROR": "We are currently having problems. Please try again later",
+      "WRONG_DATA": "The data you provided is incorrect. Please provide the correct ones.",
+      "NO_USER": "User was not found. Please enter a valid email",
+      "WRONG_PASSWORD": "The entered password is incorrect. Please enter the correct one.",
+      "IMAGE_PROFILE_UPDATE": "Failed to update your profile image. Please try again",
+      "IMAGE_PROFILE_DELETE": "Failed to delete your profile image. Please try again.",
+      "UPLOAD_FAILED": "Failed to upload your file. Please try again.",
+      "WORKSPACE_ICON_ADDED": "Failed to add workspace icon. Please try again",
+      "NO_USER_API": "User not Found",
+      "UNAUTHORIZED": "Unauthorized. Please sign in!",
+      "TOO_MANY_WORKSPACES": "The limit on the number of workspaces that can be created has been reached"
+    },
+    "SUCCESS": {
+      "SIGN_UP": "Account was created!",
+      "SIGN_IN": "You have been logged in!",
+      "IMAGE_PROFILE_UPDATE": "Your profile image has been updated!",
+      "IMAGE_PROFILE_DELETE": "Your profile image has been deleted!",
+      "ONBOARDING_COMPLETE": "Welcome to Super Productive!",
+      "PASSWORD_CHANGED": "Password has been changed!",
+      "NEW_WORKSPACE": "The workspace has been created!"
+    },
+    "PENDING": {
+      "LOADING": "Please wait"
+    },
+    "SCHEMA": {
+      "PASSWORD": {
+        "MIN": "Password must have at least 6 characters",
+        "UPPERCASE": "Password must contain at least one uppercase letter",
+        "LOWERCASE": "Password must contain at least one lowercase letter",
+        "DIGIT": "Password must contain at least one digit"
+      },
+      "EMAIL": "Please enter a valid email",
+      "USERNAME": {
+        "SHORT": "Username is too short",
+        "SPECIAL_CHARS": "Username must only contain letters and digits"
+      },
+      "IMAGE": {
+        "MAX": "Max image size is 5MB",
+        "SUPPORTED": "Only .jpeg, .jpg, .png, .webp, .gif types are supported"
+      },
+      "WORKSPACE": {
+        "SHORT": "Workspace name is too short",
+        "SPECIAL_CHARS": "Workspace name must only contain letters and digits"
+      },
+      "LANGUAGE": "Please select a language",
+      "CHOOSE_ONE": "Please select one of the options"
+    }
+  }
+}

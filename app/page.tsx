@@ -1,9 +1,9 @@
 import { FC, memo } from "react";
 
-const Home: FC = memo(() => {
+const HomePage: FC = memo(() => {
   return <>Portal Layout</>;
 });
 
-Home.displayName = "Home";
+HomePage.displayName = "HomePage";
 
-export default Home;
+export default HomePage;

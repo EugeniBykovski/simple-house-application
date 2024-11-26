@@ -1,36 +1,43 @@
-import { NextRequest, NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { withAuth } from "next-auth/middleware";
+import { NextRequest } from "next/server";
 
-export function middleware(req: NextRequest) {
-  const { nextUrl, cookies } = req;
+const locales = ["ru", "en"];
+const publicPages = ["/", "/sign-in", "/sign-up"];
 
-  if (
-    nextUrl.pathname.startsWith("/_next") ||
-    nextUrl.pathname.includes("/api/") ||
-    /\.(.*)$/.test(nextUrl.pathname)
-  ) {
-    return NextResponse.next();
+const intlMiddleware = createMiddleware({
+  locales,
+  defaultLocale: "en",
+});
+
+const authMiddleware = withAuth(
+  function onSuccess(req) {
+    return intlMiddleware(req);
+  },
+  {
+    callbacks: {
+      authorized: ({ token }) => token !== null,
+    },
+    pages: {
+      signIn: "/login",
+    },
   }
+);
 
-  const langParam = nextUrl.searchParams.get("lang");
-  let locale = langParam || cookies.get("NEXT_LOCALE")?.value || "en";
+export default function middleware(req: NextRequest) {
+  const publicPathnameRegex = RegExp(
+    `^(/(${locales.join("|")}))?(${publicPages.join("|")})?/?$`,
+    "i"
+  );
+  const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
 
-  if (!langParam) {
-    const response = NextResponse.redirect(
-      new URL(`${nextUrl.pathname}?lang=${locale}${nextUrl.search}`, req.url)
-    );
-    response.cookies.set("NEXT_LOCALE", locale);
-    return response;
+  if (isPublicPage) {
+    return intlMiddleware(req);
+  } else {
+    return (authMiddleware as any)(req);
   }
-
-  if (langParam !== cookies.get("NEXT_LOCALE")?.value) {
-    const response = NextResponse.next();
-    response.cookies.set("NEXT_LOCALE", langParam);
-    return response;
-  }
-
-  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|favicon.ico|assets).*)"],
+  matcher: ["/((?!api|_next|.*\\..*).*)"],
 };
