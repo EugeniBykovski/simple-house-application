@@ -2,6 +2,7 @@
 
 import { CardContent } from "../ui/card";
 import {
+  Form,
   FormControl,
   FormField,
   FormItem,
@@ -16,16 +17,26 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { LoadingState } from "@/components/ui/loadingState";
+import { signInSchema, SignInSchema } from "@/schema/signInSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const SignInCardContent = () => {
   const t = useTranslations("auth");
 
+  const form = useForm<SignInSchema>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
   const m = useTranslations("messages");
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: SignInSchema) => {
     setIsLoading(true);
 
     try {
@@ -66,50 +77,52 @@ export const SignInCardContent = () => {
 
   return (
     <CardContent>
-      <form className="space-y-7">
-        <ProviderSignInBtns signInCard onLoading={setIsLoading} />
-        <div className="space-y-1.5">
-          <FormField
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder={t("EMAIL")} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder={t("PASSWORD")}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="space-y-2">
-          <Button
-            disabled={isLoading}
-            className="w-full font-bold text-white"
-            type="submit"
-          >
-            {isLoading ? (
-              <LoadingState loadingText={m("PENDING.LOADING")} />
-            ) : (
-              t("SIGN_IN.SUBMIT_BTN")
-            )}
-          </Button>
-        </div>
-      </form>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7">
+          <ProviderSignInBtns signInCard onLoading={setIsLoading} />
+          <div className="space-y-1.5">
+            <FormField
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder={t("EMAIL")} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder={t("PASSWORD")}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <Button
+              disabled={isLoading}
+              className="w-full font-bold text-white"
+              type="submit"
+            >
+              {isLoading ? (
+                <LoadingState loadingText={m("PENDING.LOADING")} />
+              ) : (
+                t("SIGN_IN.SUBMIT_BTN")
+              )}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </CardContent>
   );
 };

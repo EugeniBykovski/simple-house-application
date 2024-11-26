@@ -9,6 +9,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { signUpSchema, SignUpSchema } from "@/schema/signUpSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProviderSignInBtns } from "./ProviderSignInBtns";
 import { Input } from "../ui/input";
@@ -19,7 +20,6 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { LoadingState } from "../ui/loadingState";
-import { signUpSchema, SignUpSchema } from "@/schema/signUpSchema";
 
 export const SignUpCardContent = () => {
   const t = useTranslations("auth");
@@ -48,33 +48,25 @@ export const SignUpCardContent = () => {
         },
       });
 
-      if (!res.ok) throw new Error("Something went wrong");
       const signUpInfo = await res.json();
 
-      if (res.status === 200) {
-        toast({
-          title: m("SUCCESS.SIGN_UP"),
-        });
-        await signIn("credentials", {
-          email: data.email,
-          password: data.password,
-          redirect: false,
-        });
-        router.push("/");
-      } else throw new Error(signUpInfo);
-    } catch (err) {
-      let errMsg = m("ERRORS.DEFAULT");
-      if (typeof err === "string") {
-        errMsg = err;
-      } else if (err instanceof Error) {
-        errMsg = m(err.message);
+      if (!res.ok) {
+        throw new Error(signUpInfo.message || "Something went wrong");
       }
-      toast({
-        title: errMsg,
-        variant: "destructive",
+
+      toast({ title: m("SUCCESS.SIGN_UP") });
+      await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
       });
+      router.push("/");
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : m("ERRORS.DEFAULT");
+      toast({ title: errMsg, variant: "destructive" });
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (

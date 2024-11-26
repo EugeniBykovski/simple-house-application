@@ -1,11 +1,11 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { getServerSession, NextAuthOptions } from "next-auth";
+import { db } from "./db";
 import { Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
-import { generateFromEmail } from "unique-username-generator";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import { db } from "./db";
+import { generateFromEmail } from "unique-username-generator";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -93,7 +93,7 @@ export const authOptions: NextAuthOptions = {
 
       if (user) {
         session.user.image = user.image;
-        session.user.username = user.name?.toLowerCase();
+        session.user.username = user.username;
       }
 
       return session;
@@ -112,7 +112,7 @@ export const authOptions: NextAuthOptions = {
 
       return {
         id: dbUser.id,
-        username: dbUser.name?.toLowerCase(),
+        username: dbUser.username,
         email: dbUser.email,
         picture: dbUser.image,
       };
