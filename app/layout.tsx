@@ -5,10 +5,11 @@ import clsx from "clsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Suspense } from "react";
-import { DynamicIntlProvider } from "@/components/DynamicIntlProvider/DynamicIntlProvider";
+import { DynamicIntlProvider } from "@/providers/DynamicIntlProvider/DynamicIntlProvider";
 import "./globals.css";
 import { LanguageProvider } from "@/context/LanguageProvider";
 import Header from "@/components/Header/Header";
+import { ThemeProvider } from "@/providers/ThemeProvider/ThemeProvider";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -27,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="relative">
+    <html className="relative" suppressHydrationWarning>
       <Head>
         <meta
           name="viewport"
@@ -38,11 +39,18 @@ export default function RootLayout({
         <Suspense fallback={<div>Loading...</div>}>
           <LanguageProvider>
             <DynamicIntlProvider>
-              <ToastContainer position="bottom-right" />
-              <Header />
-              <main className="w-[100%] mx-auto gap-x-2 min-h-[calc(100vh-3.5rem-1px)] my-4 container text-center">
-                {children}
-              </main>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <ToastContainer position="bottom-right" />
+                <Header />
+                <main className="w-[100%] mx-auto gap-x-2 min-h-[calc(100vh-3.5rem-1px)] my-4 container text-center">
+                  {children}
+                </main>
+              </ThemeProvider>
             </DynamicIntlProvider>
           </LanguageProvider>
         </Suspense>
