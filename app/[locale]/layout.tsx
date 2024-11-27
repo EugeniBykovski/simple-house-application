@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Head from "next/head";
 import { DM_Sans } from "next/font/google";
 import clsx from "clsx";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/ThemeProvider/ThemeProvider";

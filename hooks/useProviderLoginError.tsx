@@ -8,7 +8,7 @@ export const useProviderLoginError = (showLoggedInfo: boolean) => {
   const params = useSearchParams();
   const session = useSession();
   const { toast } = useToast();
-  const m = useTranslations("MESSAGES");
+  const m = useTranslations("messages");
   const router = useRouter();
 
   useEffect(() => {
