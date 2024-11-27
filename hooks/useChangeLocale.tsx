@@ -12,8 +12,12 @@ export const useChangeLocale = () => {
 
   const onSelectChange = (nextLocale: "ru" | "en") => {
     setIsLoading(true);
+
     startTransition(() => {
-      router.replace(`/${nextLocale}${pathname}`);
+      const updatedPath = `/${nextLocale}${pathname.replace(/^\/(en|ru)/, "")}`;
+      router.replace(updatedPath);
+
+      setIsLoading(false);
     });
   };
 

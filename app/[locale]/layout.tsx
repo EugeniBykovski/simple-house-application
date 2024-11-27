@@ -23,21 +23,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
-  children,
-  params: { locale },
-}: Readonly<{
+export default async function RootLayout(props: {
   children: React.ReactNode;
   params: { locale: string };
-}>) {
-  const isValidLocale = locales.some((cur) => cur === locale);
-  if (!isValidLocale) notFound();
+}) {
+  const { params } = props;
+  const { locale } = params;
+
+  if (!locales.includes(locale)) notFound();
 
   // @ts-ignore
-  const messages = await getMessages(locale);
+  const messages = await getMessages(locale).catch(() => getMessages("en"));
 
   return (
-    <html className="relative" suppressHydrationWarning lang={locale}>
+    <html lang={locale}>
       <Head>
         <meta
           name="viewport"
@@ -55,7 +54,7 @@ export default async function RootLayout({
             >
               <Toaster />
               <main className="w-[100%] mx-auto gap-x-2 min-h-[calc(100vh-3.5rem-1px)] my-4 container text-center">
-                {children}
+                {props.children}
               </main>
             </ThemeProvider>
           </AuthProvider>

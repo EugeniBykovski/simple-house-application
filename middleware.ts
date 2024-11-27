@@ -1,8 +1,8 @@
 import createMiddleware from "next-intl/middleware";
 import { withAuth } from "next-auth/middleware";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-const locales = ["ru", "en"];
+const locales = ["en", "ru"];
 const publicPages = ["/", "/sign-in", "/sign-up"];
 
 const intlMiddleware = createMiddleware({
@@ -16,10 +16,10 @@ const authMiddleware = withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token }) => token !== null,
+      authorized: ({ token }) => !!token,
     },
     pages: {
-      signIn: "/login",
+      signIn: "/sign-in",
     },
   }
 );

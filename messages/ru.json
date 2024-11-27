@@ -4,7 +4,7 @@
     "PASSWORD": "Password",
     "USERNAME": "Username",
     "SIGN_IN": {
-      "TITLE": "Sign in",
+      "TITLE": "Войти",
       "DESC": "Welcome back to ....",
       "SUBMIT_BTN": "Sign in",
       "FORGOT_PASSWORD": "Forgot password?",
@@ -85,6 +85,58 @@
       },
       "LANGUAGE": "Please select a language",
       "CHOOSE_ONE": "Please select one of the options"
+    }
+  },
+  "common": {
+    "WELCOMEBACK": "Welcome back",
+    "LANG_HOVER": "Сменить язык",
+    "THEME_HOVER": "Change Theme",
+    "DARK": "Dark",
+    "LIGHT": "Light",
+    "SYSTEM": "System",
+    "LOG_OUT": "Log out",
+    "SETTINGS": "Settings",
+    "WARNING": "WARNING",
+    "NOTICE": "NOTICE",
+    "DEFAULT_NAME": {
+      "MIND_MAP": "Untitled Mind Map",
+      "TASK": "Untitled Task"
+    },
+    "ACTIVE_WORKSPACES": {
+      "FIRST": "You have",
+      "SECOND": "out of",
+      "THIRD": "active workspaces"
+    },
+    "BACK_BTN": "Back",
+    "SAVING_STATUS": {
+      "SAVED": "Saved",
+      "SAVING": "Saving",
+      "UNSAVED": "Unsaved"
+    },
+    "TAG": {
+      "FILTER": "Filter",
+      "NEW_TAG": "New tag",
+      "TAG": "Tag",
+      "ERROR": "Oops... Something went wrong",
+      "ERROR_BTN": "Try again",
+      "NOT_FOUND": "Not found",
+      "TAGS_HEADING": "TAGS",
+      "NEW_HEADING": "NEW",
+      "ADD_TAG": "Add tag",
+      "COLORS": "Colors",
+      "TAG_NAME": "Name",
+      "BTNS": {
+        "CREATE": "Create",
+        "CANCEL": "Cancel",
+        "DELETE": "Delete",
+        "UPDATE": "Update"
+      }
+    },
+    "EDITED_ITEM_SENTENCE": {
+      "MIND_MAP": "Mind map edited",
+      "TASK": "Task edited",
+      "BY": "by",
+      "IN": " - in"
     }
   }
 }
