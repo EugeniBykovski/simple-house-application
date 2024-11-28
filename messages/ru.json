@@ -138,5 +138,48 @@
       "BY": "by",
       "IN": " - in"
     }
+  },
+  "onboarding_form": {
+    "FIRST_STEP": {
+      "TITLE": {
+        "FIRST": "Let's prepare you",
+        "SECOND": "ready"
+      },
+      "PHOTO": "Add photo",
+      "INPUTS": {
+        "NAME": "First name",
+        "SURNAME": "Surname"
+      },
+      "PLACEHOLDER": {
+        "NAME": "Vineeth",
+        "SURNAME": "Reddy"
+      }
+    },
+    "SECOND_STEP": {
+      "TITLE": "How will you use",
+      "INFO": "We use this information to personalize your experience",
+      "WORK": "For work",
+      "STUDY": "For study",
+      "PERSONAL": "For personal use"
+    },
+    "THIRD_STEP": {
+      "TITLE": "Create a workspace",
+      "INPUTS": {
+        "NAME": "Workspace name",
+        "FILE": "Workspace icon (optional)"
+      },
+      "PLACEHOLDERS": {
+        "NAME": "eg. Open Studio"
+      },
+      "IMAGE": "Only .jpeg, .jpg, .png, .webp, .gif types are supported"
+    },
+    "FINISH": {
+      "TITLE": "That's it!",
+      "DESC_FIRST": "You can already start using",
+      "DESC_SECOND": "by clicking the button below"
+    },
+    "START_BTN": "Start",
+    "NEXT_BTN": "Continue",
+    "IS_DONE": "just a moment more"
   }
 }

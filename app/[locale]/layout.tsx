@@ -53,7 +53,7 @@ export default async function RootLayout(props: {
               disableTransitionOnChange
             >
               <Toaster />
-              <main className="w-[100%] mx-auto gap-x-2 min-h-[calc(100vh-3.5rem-1px)] my-4 container text-center">
+              <main className="w-[100%] mx-auto gap-x-2 min-h-[calc(100vh-3.5rem-1px)] container text-center">
                 {props.children}
               </main>
             </ThemeProvider>

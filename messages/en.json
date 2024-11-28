@@ -75,6 +75,10 @@
         "SHORT": "Username is too short",
         "SPECIAL_CHARS": "Username must only contain letters and digits"
       },
+      "SURNAME": {
+        "SHORT": "Surname is too short",
+        "SPECIAL_CHARS": "Surname must only contain letters and digits"
+      },
       "IMAGE": {
         "MAX": "Max image size is 5MB",
         "SUPPORTED": "Only .jpeg, .jpg, .png, .webp, .gif types are supported"
@@ -137,6 +141,113 @@
       "TASK": "Task edited",
       "BY": "by",
       "IN": " - in"
+    }
+  },
+  "change_profile_image": {
+    "TITLE": "Send a photo!",
+    "BUTTON": "Choose a photo"
+  },
+  "onboarding_form": {
+    "FIRST_STEP": {
+      "TITLE": {
+        "FIRST": "Let's prepare you",
+        "SECOND": "ready"
+      },
+      "PHOTO": "Please, add a photo",
+      "INPUTS": {
+        "NAME": "Your first name",
+        "SURNAME": "Your surname"
+      },
+      "PLACEHOLDER": {
+        "NAME": "Name",
+        "SURNAME": "Surname"
+      }
+    },
+    "SECOND_STEP": {
+      "TITLE": "How will you use",
+      "INFO": "We use this information to personalize your experience",
+      "WORK": "For work",
+      "STUDY": "For study",
+      "PERSONAL": "For personal use"
+    },
+    "THIRD_STEP": {
+      "TITLE": "Create a workspace",
+      "INPUTS": {
+        "NAME": "Workspace name",
+        "FILE": "Workspace icon (optional)"
+      },
+      "PLACEHOLDERS": {
+        "NAME": "eg. Open Studio"
+      },
+      "IMAGE": "Only .jpeg, .jpg, .png, .webp, .gif types are supported"
+    },
+    "FINISH": {
+      "TITLE": "That's it!",
+      "DESC_FIRST": "You can already start using",
+      "DESC_SECOND": "by clicking the button below"
+    },
+    "START_BTN": "Start",
+    "NEXT_BTN": "Continue",
+    "IS_DONE": "just a moment more"
+  },
+  "EDITOR": {
+    "PLACEHOLDER": "Write something cool 📝",
+    "WORDS": "number of words:",
+    "CHARS": "chars",
+    "IMAGE": {
+      "TITLE": "Add image",
+      "DESC": "You can add a photo by providing a link to it or you can import it from your device.",
+      "LINK": "Add via the link",
+      "UPLOAD": "Import from device",
+      "LINK_TAB": {
+        "PLACEHOLDER": "Photo link",
+        "BTN_ADD": "Add image",
+        "BTN_PENDING": "Checking the link"
+      },
+      "UPLOAD_TAB": {
+        "TYPES": "Only the types .jpeg, .jpg, .png, .webp, .gif are allowed",
+        "BTN_ADD": "Add image",
+        "BTN_PENDING": "Adding"
+      }
+    },
+    "HOVER": {
+      "H1": "Title 1",
+      "H2": "Title 2",
+      "H3": "Title 3",
+      "H4": "Title 4",
+      "H5": "Title 5",
+      "H6": "Title 6",
+      "BOLD": "Bold",
+      "ITALIC": "Italic",
+      "STRIKETHROUGH": "Strikethrough",
+      "UNDERLINE": "Underline",
+      "CODE": "Code",
+      "UL": "Unordered list",
+      "OL": "Ordered list",
+      "LINK": "Add hyperlink",
+      "IMAGE": "Add image",
+      "COLOR": "Highlight",
+      "COLOR_DEFAULT": "Default color",
+      "UNDO": "Undo",
+      "REDO": "Redo",
+      "DELETE": "Delete"
+    },
+    "READ_ONLY": {
+      "NO_DATE": "not recorded in the calendar",
+      "NO_TITLE": "Untitled task",
+      "NO_CONTENT": "Task without content",
+      "DELETE": "Delete",
+      "EDIT": "Edit",
+      "ADD_TO_FAV": "Add to favourites",
+      "REMOVE_FROM_FAV": "Remove from favourites",
+      "CREATOR_INFO": "Created by",
+      "EDITOR_INFO": "Edited by",
+      "DIALOG": {
+        "TITLE": "Delete task",
+        "DESC": "Are you sure you want to delete this note? You will lose all the data it contains and the activities associated with it. Deletion is irreversible",
+        "BTN_DELETE": "Delete task",
+        "BTN_PENDING": "Deleting"
+      }
     }
   }
 }
