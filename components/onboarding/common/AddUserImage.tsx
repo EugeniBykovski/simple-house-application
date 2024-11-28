@@ -20,10 +20,10 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { User as UserType } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { LoadingState } from "../../ui/loadingState";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { LoadingState } from "@/components/ui/loadingState";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -32,15 +32,14 @@ interface Props {
 }
 
 export const AddUserImage = ({ profileImage, className }: Props) => {
-  const m = useTranslations("messages");
-  const t = useTranslations("change_profile_image");
-
   const [imagePreview, setImagePreview] = useState("");
   const inputRef = useRef<null | HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { update } = useSession();
   const { toast } = useToast();
+  const m = useTranslations("messages");
+  const t = useTranslations("change_profile_image");
 
   const form = useForm<ImageSchema>({
     resolver: zodResolver(imageSchema),
@@ -49,17 +48,22 @@ export const AddUserImage = ({ profileImage, className }: Props) => {
   const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
+      console.log("Selected file:", selectedFile);
       const result = imageSchema.safeParse({ image: selectedFile });
 
       if (result.success) {
+        console.log("Validation passed!");
         form.clearErrors("image");
         form.setValue("image", selectedFile);
-        setImagePreview(URL.createObjectURL(e.target.files[0]));
+
+        const preview = URL.createObjectURL(selectedFile);
+        console.log("Preview URL:", preview);
+        setImagePreview(preview);
       } else {
         const errors = result.error.flatten().fieldErrors.image;
-        errors?.forEach((error: string) =>
-          form.setError("image", { message: error })
-        );
+
+        console.log("Validation failed:", errors);
+        errors?.forEach((error) => form.setError("image", { message: error }));
       }
     }
   };
@@ -89,14 +93,14 @@ export const AddUserImage = ({ profileImage, className }: Props) => {
   }, [imagePreview, profileImage]);
 
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
-    onUploadError: (error: any) => {
+    onUploadError: (error) => {
       toast({
         title: m("ERRORS.UPLOAD_TITLE"),
         variant: "destructive",
       });
     },
-    onClientUploadComplete: (data: any) => {
-      if (data) console.log("Upload profile image");
+    onClientUploadComplete: (data) => {
+      if (data) uploadProfileImage(data[0].url);
       else {
         toast({
           title: m("ERRORS.IMAGE_PROFILE_UPDATE"),
@@ -106,50 +110,50 @@ export const AddUserImage = ({ profileImage, className }: Props) => {
     },
   });
 
-  // const { mutate: uploadProfileImage, isPending } = useMutation({
-  //   mutationFn: async (profileImage: string) => {
-  //     const { data } = await axios.post(`/api/profile/profileImage`, {
-  //       profileImage,
-  //     });
-  //     return data as UserType;
-  //   },
-  //   onError: (err: string) => {
-  //     toast({
-  //       title: m("ERRORS.IMAGE_PROFILE_UPDATE"),
-  //       variant: "destructive",
-  //     });
-  //   },
-  //   onSuccess: async () => {
-  //     toast({
-  //       title: m("SUCCESS.IMAGE_PROFILE_UPDATE"),
-  //     });
-  //     setOpen(false);
-  //     await update();
-  //     router.refresh();
-  //   },
-  //   mutationKey: ["updateProfileImage"],
-  // });
+  const { mutate: uploadProfileImage, isPending } = useMutation({
+    mutationFn: async (profileImage: string) => {
+      const { data } = await axios.post(`/api/profile/profileImage`, {
+        profileImage,
+      });
+      return data as UserType;
+    },
+    onError: (err) => {
+      toast({
+        title: m("ERRORS.IMAGE_PROFILE_UPDATE"),
+        variant: "destructive",
+      });
+    },
+    onSuccess: async () => {
+      toast({
+        title: m("SUCCESS.IMAGE_PROFILE_UPDATE"),
+      });
+      setOpen(false);
+      await update();
+      router.refresh();
+    },
+    mutationKey: ["updateProfileImage"],
+  });
 
-  // const { mutate: deleteProfileImage, isPending: isDeleting } = useMutation({
-  //   mutationFn: async () => {
-  //     const { data } = await axios.post(`/api/profile/delete_profile_image`);
-  //     return data as UserType;
-  //   },
-  //   onError: (err: string) => {
-  //     toast({
-  //       title: m("ERRORS.IMAGE_PROFILE_UPDATE"),
-  //       variant: "destructive",
-  //     });
-  //   },
-  //   onSuccess: async () => {
-  //     toast({
-  //       title: m("SUCCESS.IMAGE_PROFILE_UPDATE"),
-  //     });
-  //     await update();
-  //     router.refresh();
-  //   },
-  //   mutationKey: ["deleteProfileImage"],
-  // });
+  const { mutate: deleteProfileImage, isPending: isDeleting } = useMutation({
+    mutationFn: async () => {
+      const { data } = await axios.post(`/api/profile/delete_profile_image`);
+      return data as UserType;
+    },
+    onError: (err) => {
+      toast({
+        title: m("ERRORS.IMAGE_PROFILE_UPDATE"),
+        variant: "destructive",
+      });
+    },
+    onSuccess: async () => {
+      toast({
+        title: m("SUCCESS.IMAGE_PROFILE_UPDATE"),
+      });
+      await update();
+      router.refresh();
+    },
+    mutationKey: ["deleteProfileImage"],
+  });
 
   const onSubmit = async (data: ImageSchema) => {
     const image: File = data.image;
@@ -180,7 +184,6 @@ export const AddUserImage = ({ profileImage, className }: Props) => {
             )}
             <div className="group-hover:opacity-80 transition-opacity duration-200 opacity-0 w-full h-full absolute bg-black flex justify-center items-center flex-col gap-1 text-xs text-white">
               <Camera size={20} />
-              {/* <p>{t("HOVER")}</p> */}
             </div>
           </Button>
         </DialogTrigger>
@@ -192,7 +195,7 @@ export const AddUserImage = ({ profileImage, className }: Props) => {
             <div className="rounded-full w-32 h-32 sm:w-52 sm:h-52 relative overflow-hidden my-5">
               <Image
                 src={imagePreview}
-                alt=""
+                alt="Preview"
                 fill
                 className="object-cover w-full h-full"
               />
@@ -242,20 +245,20 @@ export const AddUserImage = ({ profileImage, className }: Props) => {
               <div className="flex mt-5 w-full justify-center items-center gap-4">
                 <Button
                   type="button"
-                  disabled={!imageOptions.canDelete}
+                  disabled={!imageOptions.canDelete || isDeleting}
                   variant={imageOptions.canDelete ? "default" : "secondary"}
                   className={`rounded-full w-12 h-12 p-2 ${
                     imageOptions.canDelete
                       ? "text-white"
                       : "text-muted-foreground"
                   }`}
-                  onClick={() => console.log("Delete image")}
+                  onClick={() => deleteProfileImage()}
                 >
-                  <Trash size={18} />
+                  {isDeleting ? <LoadingState /> : <Trash size={18} />}
                 </Button>
                 <Button
                   type="submit"
-                  disabled={!imageOptions.canSave || isUploading}
+                  disabled={!imageOptions.canSave || isUploading || isPending}
                   variant={imageOptions.canSave ? "default" : "secondary"}
                   className={`rounded-full w-12 h-12 p-2 ${
                     imageOptions.canSave
@@ -263,7 +266,11 @@ export const AddUserImage = ({ profileImage, className }: Props) => {
                       : "text-muted-foreground"
                   }`}
                 >
-                  <Check size={18} />
+                  {isPending || isUploading ? (
+                    <LoadingState />
+                  ) : (
+                    <Check size={18} />
+                  )}
                 </Button>
               </div>
             </form>

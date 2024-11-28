@@ -56,7 +56,7 @@
       "SIGN_IN": "You have been logged in!",
       "IMAGE_PROFILE_UPDATE": "Your profile image has been updated!",
       "IMAGE_PROFILE_DELETE": "Your profile image has been deleted!",
-      "ONBOARDING_COMPLETE": "Welcome to Super Productive!",
+      "ONBOARDING_COMPLETE": "Welcome to Simple House!",
       "PASSWORD_CHANGED": "Password has been changed!",
       "NEW_WORKSPACE": "The workspace has been created!"
     },
@@ -190,7 +190,7 @@
     "NEXT_BTN": "Continue",
     "IS_DONE": "just a moment more"
   },
-  "EDITOR": {
+  "editor": {
     "PLACEHOLDER": "Write something cool 📝",
     "WORDS": "number of words:",
     "CHARS": "chars",
@@ -249,5 +249,8 @@
         "BTN_PENDING": "Deleting"
       }
     }
+  },
+  "upload_file": {
+    "UPLOAD": "Upload"
   }
 }

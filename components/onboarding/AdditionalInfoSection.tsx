@@ -2,11 +2,11 @@
 
 import { useOnboardingForm } from "@/context/OnboardingForm";
 import { FormStepsInfo } from "./FormStepsInfo";
-import ThirdStep from "./steps/ThirdStep";
-import Finish from "./steps/Finish";
 import { FirstStep } from "./steps/FirstStep";
 import { SecondStep } from "./steps/SecondStep";
-import { AppTitle } from "../ui/app-title";
+import { AppTitle } from "@/components/ui/app-title";
+import { ThirdStep } from "./steps/ThirdStep";
+import { Finish } from "./steps/Finish";
 
 interface Props {
   profileImage?: string | null;

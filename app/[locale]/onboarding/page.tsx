@@ -8,7 +8,7 @@ const Onboarding = async () => {
 
   return (
     <OnboardingFormProvider session={session}>
-      <AdditionalInfoSection />
+      <AdditionalInfoSection profileImage={session.user.image} />
       <SummarySection />
     </OnboardingFormProvider>
   );

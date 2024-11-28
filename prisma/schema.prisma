@@ -22,6 +22,8 @@ model User {
   createdWorkspaces Workspace[] @relation("CreatedBy")
   subscriptions Subscription[]
   useCase UseCase?
+
+  PomodoroSettings PomodoroSettings[]
 }
  
 model Account {
@@ -107,4 +109,41 @@ model Subscription {
   @@id([userId, workspaceId])
   @@index([workspaceId])
   @@index([userId])
+}
+
+enum PomodoroSoundEffect {
+  ANALOG
+  BIRD
+  CHURCH_BELL
+  DIGITAL
+  FANCY
+  BELL
+}
+
+model PomodoroSettings {
+  id String @id @default(cuid())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  workDuration Int @default(25)
+  shortBreakDuration Int @default(5)
+  longBreakDuration Int @default(15)
+  longBreakInterval Int @default(2)
+  rounds Int @default(3)
+  soundEffect PomodoroSoundEffect @default(BELL)
+  soundEffectVolume Float @default(0.5)
+}
+
+enum CustomColors {
+  PURPLE
+  RED
+  GREEN
+  BLUE
+  PINK
+  YELLOW
+  ORANGE
+  CYAN
+  LIME
+  EMERALD
+  INDIGO
+  FUCHSIA
 }

@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import type { PluginAPI } from "tailwindcss/types/config";
+import { withUt } from "uploadthing/tw";
 
 const config: Config = {
   darkMode: ["class"],
@@ -118,4 +119,4 @@ const config: Config = {
     },
   ],
 };
-export default config;
+export default withUt(config);

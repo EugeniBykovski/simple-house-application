@@ -10,6 +10,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { AuthProvider } from "@/providers/AuthProvider/AuthProvider";
 import { Toaster } from "@/components/ui/toaster";
+import { QueryProvider } from "@/providers/QueryProvider/QueryProvider";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 const locales = ["en", "ru"];
@@ -46,17 +47,19 @@ export default async function RootLayout(props: {
       <body className={clsx(dmSans.className, "antialiased")}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Toaster />
-              <main className="w-[100%] mx-auto gap-x-2 min-h-[calc(100vh-3.5rem-1px)] container text-center">
-                {props.children}
-              </main>
-            </ThemeProvider>
+            <QueryProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <Toaster />
+                <main className="w-[100%] mx-auto gap-x-2 min-h-[calc(100vh-3.5rem-1px)] container text-center">
+                  {props.children}
+                </main>
+              </ThemeProvider>
+            </QueryProvider>
           </AuthProvider>
         </NextIntlClientProvider>
       </body>
