@@ -21,7 +21,7 @@ export const SidebarContainer = ({
   return (
     <>
       <aside
-        className={`fixed z-50 top-0 h-full left-0  bg-background border-r flex lg:translate-x-0 transition-all duration-300 ${
+        className={`fixed z-50 top-0 h-full left-0 bg-background border-r flex lg:translate-x-0 transition-all duration-300 ${
           isOpen ? "translate-x-0 shadow-sm" : "translate-x-[-100%]"
         }`}
       >
