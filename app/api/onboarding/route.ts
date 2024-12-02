@@ -2,8 +2,6 @@ import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { UseCase as UseCaseType } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
-import { getRandomWorkspaceColor } from "@/lib/getRandomWorkspaceColor";
 import { onboardingSchema } from "@/schema/onboardingSchema";
 
 export async function POST(request: Request) {
@@ -57,11 +55,6 @@ export async function POST(request: Request) {
         creatorId: user.id,
         name: workspaceName,
         image: workspaceImage,
-        inviteCode: uuidv4(),
-        adminCode: uuidv4(),
-        canEditCode: uuidv4(),
-        readOnlyCode: uuidv4(),
-        color: getRandomWorkspaceColor(),
       },
     });
 
@@ -76,12 +69,6 @@ export async function POST(request: Request) {
     await db.pomodoroSettings.create({
       data: {
         userId: user.id,
-      },
-    });
-
-    const conversation = await db.conversation.create({
-      data: {
-        workspaceId: workspace.id,
       },
     });
 

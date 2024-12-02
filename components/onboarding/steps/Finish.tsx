@@ -65,7 +65,7 @@ export const Finish = () => {
           {t("FINISH.DESC_FIRST")}{" "}
           <span>
             Simple <span className="text-primary font-semibold">House</span>
-          </span>
+          </span>{" "}
           {t("FINISH.DESC_SECOND")}{" "}
         </p>
         <Button

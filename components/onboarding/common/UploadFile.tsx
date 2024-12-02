@@ -54,7 +54,8 @@ export function UploadFile({
   btnSize,
   btnVariant,
 }: Props) {
-  const t = useTranslations("UPLOAD_FILE");
+  const t = useTranslations("upload_file");
+
   const [dragActive, setDragActive] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -75,12 +76,14 @@ export function UploadFile({
       form.clearErrors("file");
       form.setValue("file", providedFile);
       setFile(providedFile);
+
       if (onGetImagePreview)
         onGetImagePreview(URL.createObjectURL(providedFile));
     } else {
       const errors = result.error.flatten().fieldErrors.file;
       errors?.forEach((error) => form.setError("file", { message: error }));
     }
+
     form.trigger("file");
   };
 
@@ -96,6 +99,7 @@ export function UploadFile({
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
+
     const files = e.dataTransfer.files;
     if (files && files[0]) {
       onFileHandler(files[0]);

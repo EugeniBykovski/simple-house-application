@@ -252,5 +252,42 @@
   },
   "upload_file": {
     "UPLOAD": "Upload"
+  },
+  "sidebar": {
+    "MAIN": {
+      "HOME_HOVER": "Home",
+      "LOG_OUT_HOVER": "Log out",
+      "SETTINGS_HOVER": "Settings",
+      "POMODORO_HOVER": "Pomodoro",
+      "STARRED_HOVER": "Starred",
+      "ASSIGNED_TO_ME_HOVER": "Assigned to me",
+      "CALENDAR_HOVER": "Calendar",
+      "NEW_WORKSPACE_HOVER": "New Workspace",
+      "NEW_WORKSPACE_DIALOG_TITLE": "Create new workspace",
+      "NEW_WORKSPACE_DIALOG_DESC": "some text"
+    },
+    "SETTINGS": {
+      "GENERAL": "General",
+      "ACCOUNT": "Account",
+      "SECURITY": "Security",
+      "THEME": "Theme",
+      "WORKSPACE": "Workspace"
+    },
+    "POMODORO": {
+      "TIMER": "Timer",
+      "SETTINGS": "Settings"
+    },
+    "WORKSPACE_OPTIONS": {
+      "SHORTCUTS": "Shortcuts",
+      "TASKS": "Tasks",
+      "MIND_MAPS": "Mind maps",
+      "SCHEDULES": "Schedules",
+      "STUDY": "Study",
+      "FILES": "Files",
+      "DEFAULT_NAME": "Untitled",
+      "ACTIONS": "Actions",
+      "ADD_TASK": "Add task",
+      "ADD_MIND_MAP": "Add mind map"
+    }
   }
 }

@@ -95,6 +95,7 @@ model Workspace {
   creatorId String?
   Creator User? @relation("CreatedBy", fields: [creatorId], references: [id], onDelete: Cascade)
   subscribers Subscription[]
+  image String?
 
   @@index([creatorId])
 }
