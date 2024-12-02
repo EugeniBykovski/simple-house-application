@@ -8,11 +8,11 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { LogOutIcon, Settings2 } from "lucide-react";
+import { ArrowRightLeft, LogOutIcon, Settings2 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 
-export const Bottom = () => {
+export const Bottom = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
   const t = useTranslations("sidebar");
 
   const lang = useLocale();
@@ -24,13 +24,30 @@ export const Bottom = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <LocaleSwitcher
-        textSize="text-lg"
-        alignHover="start"
-        alignDropdown="start"
-        variant={"ghost"}
-        size={"icon"}
-      />
+      <HoverCard openDelay={250} closeDelay={250}>
+        <HoverCardTrigger>
+          <LocaleSwitcher
+            textSize="text-lg"
+            alignHover="start"
+            alignDropdown="start"
+            variant={"ghost"}
+            size={"icon"}
+          />
+        </HoverCardTrigger>
+        <HoverCardContent align="start">
+          <span>{t("MAIN.CHANGE_LANG_HOVER")}</span>
+        </HoverCardContent>
+      </HoverCard>
+      <HoverCard openDelay={250} closeDelay={250}>
+        <HoverCardTrigger tabIndex={1}>
+          <Button onClick={toggleSidebar} variant={"ghost"} size={"icon"}>
+            <ArrowRightLeft />
+          </Button>
+        </HoverCardTrigger>
+        <HoverCardContent align="start">
+          <span>{t("MAIN.OPEN_CLOSE_SIDEBAR_HOVER")}</span>
+        </HoverCardContent>
+      </HoverCard>
       <HoverCard openDelay={250} closeDelay={250}>
         <HoverCardTrigger tabIndex={1}>
           <Button onClick={logOutHandler} variant={"ghost"} size={"icon"}>
@@ -39,7 +56,7 @@ export const Bottom = () => {
         </HoverCardTrigger>
       </HoverCard>
       <HoverCard openDelay={250} closeDelay={250}>
-        <HoverCardTrigger tabIndex={1}>
+        <HoverCardTrigger tabIndex={2}>
           <ActiveLink
             include="settings"
             variant={"ghost"}

@@ -258,6 +258,8 @@
       "HOME_HOVER": "Home",
       "LOG_OUT_HOVER": "Log out",
       "SETTINGS_HOVER": "Settings",
+      "OPEN_CLOSE_SIDEBAR_HOVER": "Open | Close Sidebar",
+      "CHANGE_LANG_HOVER": "Change Language",
       "POMODORO_HOVER": "Pomodoro",
       "STARRED_HOVER": "Starred",
       "ASSIGNED_TO_ME_HOVER": "Assigned to me",

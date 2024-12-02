@@ -21,14 +21,14 @@ export const SidebarContainer = ({
   return (
     <>
       <aside
-        className={`fixed z-50 top-0 h-full left-0 bg-background border-r flex lg:translate-x-0 transition-all duration-300 ${
+        className={`z-50 top-0 h-full left-0 bg-background border-r lg:translate-x-0 transition-all duration-300 sm:hidden lg:flex ${
           isOpen ? "translate-x-0 shadow-sm" : "translate-x-[-100%]"
         }`}
       >
         <ShortcutSidebar
           userWorkspaces={userWorkspaces ? userWorkspaces : []}
         />
-        <div>OptionsSidebar</div>
+        <div className="p-4">Options</div>
         <CloseSidebar />
       </aside>
       <div
