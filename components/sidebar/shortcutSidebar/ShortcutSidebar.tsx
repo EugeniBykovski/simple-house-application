@@ -14,7 +14,7 @@ export const ShortcutSidebar = ({ userWorkspaces }: Props) => {
 
   return (
     <div
-      className={`border-r h-full flex flex-col justify-between items-start p-2 sm:py-2 bg-background transition-all duration-300 ${
+      className={`border-r h-full flex flex-col justify-between items-start p-2 pl-3 sm:py-2 bg-background transition-all duration-300 ${
         isCollapsed ? "w-16" : "w-64"
       }`}
     >

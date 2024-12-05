@@ -253,6 +253,17 @@
   "upload_file": {
     "UPLOAD": "Upload"
   },
+  "routes": {
+    "DASHBOARD": "Home",
+    "SETTINGS": "Settings",
+    "SECURITY": "Security",
+    "THEME": "Theme",
+    "TASKS": "Tasks",
+    "UNTITLED": "Untitled",
+    "POMODORO": "Pomodoro",
+    "STARRED": "Starred",
+    "ASSIGNED-TO-ME": "Assigned to me"
+  },
   "sidebar": {
     "MAIN": {
       "HOME_HOVER": "Home",

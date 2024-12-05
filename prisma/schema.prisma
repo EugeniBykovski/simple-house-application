@@ -96,6 +96,7 @@ model Workspace {
   Creator User? @relation("CreatedBy", fields: [creatorId], references: [id], onDelete: Cascade)
   subscribers Subscription[]
   image String?
+  color CustomColors @default(BLUE)
 
   @@index([creatorId])
 }

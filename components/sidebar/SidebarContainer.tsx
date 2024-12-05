@@ -4,6 +4,7 @@ import { useToggleSidebar } from "@/context/ToggleSidebar";
 import { Workspace } from "@prisma/client";
 import { CloseSidebar } from "./CloseSidebar";
 import { ShortcutSidebar } from "./shortcutSidebar/ShortcutSidebar";
+import OptionsSidebar from "./optionsSidebar/OptionsSidebar";
 
 interface Props {
   userWorkspaces: Workspace[];
@@ -21,14 +22,18 @@ export const SidebarContainer = ({
   return (
     <>
       <aside
-        className={`z-50 top-0 h-full left-0 bg-background border-r lg:translate-x-0 transition-all duration-300 sm:hidden lg:flex ${
+        className={`z-50 top-0 h-full left-0 bg-background border-r lg:translate-x-0 transition-all duration-300 sm:hidden lg:flex shadow-lg ${
           isOpen ? "translate-x-0 shadow-sm" : "translate-x-[-100%]"
         }`}
       >
         <ShortcutSidebar
           userWorkspaces={userWorkspaces ? userWorkspaces : []}
         />
-        <div className="p-4">Options</div>
+        <OptionsSidebar
+        // createdWorkspaces={createdWorkspaces.length}
+        // userAdminWorkspaces={userAdminWorkspaces}
+        // userWorkspaces={userWorkspaces}
+        />
         <CloseSidebar />
       </aside>
       <div

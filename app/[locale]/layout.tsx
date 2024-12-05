@@ -16,11 +16,11 @@ const dmSans = DM_Sans({ subsets: ["latin"] });
 const locales = ["en", "ru"];
 
 export const metadata: Metadata = {
-  title: "Innovative Solutions for Your Business",
-  description: "Innovative Solutions for Your Business",
+  title: "Simple House",
+  description: "Innovative Solutions for Your Home",
   icons: {
-    icon: "/assets/icons/logos/logo.svg",
-    shortcut: "/assets/icons/logos/logo.svg",
+    icon: "/public/img/Simple.png",
+    shortcut: "/public/img/Simple.png",
   },
 };
 
