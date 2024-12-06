@@ -1,6 +1,5 @@
 "use client";
 
-import { FC } from "react";
 import { usePathname } from "next/navigation";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Settings } from "./settingsOptions/Settings";

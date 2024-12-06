@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { useFormatter } from "next-intl";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -18,4 +19,15 @@ export const handleSmoothScroll = (e: React.MouseEvent, targetId: string) => {
       behavior: "smooth",
     });
   }
+};
+
+export const getFormattedDate = () => {
+  const format = useFormatter();
+  const dateTime = new Date();
+
+  return format.dateTime(dateTime, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };

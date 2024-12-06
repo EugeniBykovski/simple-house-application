@@ -1,23 +1,13 @@
 import { getAuthSession } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import { User } from "./User";
-import { BackButton } from "./BackButton";
-import { Breadcrumb } from "./Breadcrumb";
-
-interface Props {
-  addManualRoutes?: {
-    name: string;
-    href: string;
-    useTranslate?: boolean;
-    emoji?: string;
-  }[];
-  className?: string;
-  children?: React.ReactNode;
-  workspaceHref?: string;
-  hideBreadCrumb?: boolean;
-  showingSavingStatus?: boolean;
-  showBackBtn?: boolean;
-}
+import { User } from "../User";
+import { BackButton } from "../BackButton";
+import { Breadcrumb } from "../Breadcrumb/Breadcrumb";
+import Welcoming from "../../common/Welcoming/Welcoming";
+import { SavingStatus } from "../SavingStatus";
+import { OpenSidebar } from "../OpenSidebar";
+import { DashboardHeaderProps } from "./types";
+import { SignDocuments } from "../SignDocuments/SignDocuments";
 
 export const DashboardHeader = async ({
   addManualRoutes,
@@ -27,21 +17,29 @@ export const DashboardHeader = async ({
   hideBreadCrumb,
   showingSavingStatus,
   showBackBtn,
-}: Props) => {
+}: DashboardHeaderProps) => {
   const session = await getAuthSession();
   if (!session) return null;
+
   return (
     <header
       className={cn(
-        "flex w-full justify-between items-center mb-4 p-4 gap-2",
+        "flex w-full justify-between items-center mb-4 p-4 gap-2 shadow-md",
         className
       )}
     >
       <div className="flex items-center gap-2">
-        <div>OpenSidebar</div>
-        <div>Welcoming</div>
+        <OpenSidebar />
+        <Welcoming
+          hideOnMobile
+          hideOnDesktop
+          username={session?.user.username!}
+          name={session?.user.name}
+          surname={session?.user.surname}
+          showOnlyOnPath="/dashboard"
+        />
         {showBackBtn && <BackButton />}
-        <div>SavingStatus</div>
+        {showingSavingStatus && <SavingStatus />}
         {!hideBreadCrumb && (
           <Breadcrumb
             addManualRoutes={addManualRoutes}
@@ -51,8 +49,9 @@ export const DashboardHeader = async ({
       </div>
       <div className="flex items-center gap-1 sm:gap-2">
         <div className="flex flex-wrap items-center gap-0.5 sm:gap-1">
+          <SignDocuments />
           {children}
-          <div>NotificationContainer</div>
+          <div>Notifications</div>
         </div>
         <User
           profileImage={session?.user.image}

@@ -92,7 +92,7 @@
     }
   },
   "common": {
-    "WELCOMEBACK": "Welcome back",
+    "WELCOMEBACK": "Welcome",
     "LANG_HOVER": "Change language",
     "THEME_HOVER": "Change Theme",
     "DARK": "Dark",
@@ -301,6 +301,38 @@
       "ACTIONS": "Actions",
       "ADD_TASK": "Add task",
       "ADD_MIND_MAP": "Add mind map"
+    }
+  },
+  "settings": {
+    "ACCOUNT": {
+      "TITLE": "Account",
+      "DESC": "Manage your Simple House account. All changes to your account will be applied to all workspaces.",
+      "IMAGE": "PROFILE IMAGE",
+      "USERNAME": "USERNAME",
+      "FIRST_NAME": "FIRST NAME (OPTIONAL)",
+      "SURNAME": "SURNAME (OPTIONAL)",
+      "USERNAME_PLACEHOLDER": "Username",
+      "FIRST_NAME_PLACEHOLDER": "First name",
+      "SURNAME_PLACEHOLDER": "Surname",
+      "LANG": "LANGUAGE",
+      "SEARCH_LANGUAGE": "Search language...",
+      "SELECT_LANGUAGE": "Select language",
+      "UPDATE_BTN": "Update",
+      "DELETE_TITLE": "Delete account",
+      "DELETE_DESC": "Once the account and data are deleted, there is no way to recover them.",
+      "DELETE_LABEL": "DELETE MY ACCOUNT AND DATA",
+      "DELETE_PLACEHOLDER": "Confirm your email",
+      "DELETE_BTN": "Delete",
+      "DIALOG": {
+        "TITLE": "Delete account",
+        "DESC": "You will loose access to all your workspaces and projects",
+        "WARNING": "Account deletion is permanent and cannot be undone,click 'Delete my account' to delete your account.",
+        "BUTTON": "DELETE MY ACCOUNT"
+      }
+    },
+    "THEME": {
+      "ADD_TASK": "Add task",
+      "ADD_TASK_PENDING": "Creating task"
     }
   }
 }

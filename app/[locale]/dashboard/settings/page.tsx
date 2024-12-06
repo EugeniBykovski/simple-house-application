@@ -1,7 +1,10 @@
 import { FC } from "react";
 import { Separator } from "@/components/ui/separator";
 import { checkIfUserCompletedOnboarding } from "@/lib/checkIfUserCompletedOnboarding";
-import { DashboardHeader } from "@/components/header/DashboardHeader";
+import { DashboardHeader } from "@/components/header/DashboardHeader/DashboardHeader";
+import { Heading } from "@/components/settings/account/Heading/Heading";
+import { AccountInfo } from "@/components/settings/account/AccountInfo/AccountInfo";
+import { DeleteAccount } from "@/components/settings/account/DeleteAccount/DeleteAccount";
 
 const SettingsPage: FC = async () => {
   const session = await checkIfUserCompletedOnboarding("/dashboard/settings");
@@ -11,13 +14,13 @@ const SettingsPage: FC = async () => {
       <DashboardHeader>
         <div>AddTaskShortcut</div>
       </DashboardHeader>
-      <main>
-        <div>Heading</div>
-        <div>AccountInfo</div>
-        <div className="p-4 sm:p-6">
+      <main className="py-2 px-3">
+        <Heading />
+        <AccountInfo session={session} />
+        <div className="py-6">
           <Separator />
         </div>
-        <div>DeleteAccount</div>
+        <DeleteAccount userEmail={session.user.email!} />
       </main>
     </>
   );

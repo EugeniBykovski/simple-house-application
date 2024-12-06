@@ -18,7 +18,7 @@ export const ProviderSignInBtn = ({
   ...props
 }: Props) => {
   const [showLoggedInfo, setShowLoggedInfo] = useState(false);
-  const locale = useLocale();
+  const requestLocale = useLocale();
 
   useProviderLoginError(showLoggedInfo);
 
@@ -26,7 +26,9 @@ export const ProviderSignInBtn = ({
     onLoading(true);
     setShowLoggedInfo(true);
     try {
-      await signIn(providerName, { callbackUrl: `/${locale}/onboarding` });
+      await signIn(providerName, {
+        callbackUrl: `/${requestLocale}/onboarding`,
+      });
     } catch (err) {}
     onLoading(false);
   };

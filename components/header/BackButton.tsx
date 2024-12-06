@@ -1,10 +1,12 @@
 "use client";
+
+import { FC } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
 import { ChevronLeftIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export const BackButton = () => {
+export const BackButton: FC = () => {
   const t = useTranslations("common");
   const router = useRouter();
 

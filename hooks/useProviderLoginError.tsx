@@ -5,10 +5,11 @@ import { useTranslations } from "next-intl";
 import { useToast } from "./use-toast";
 
 export const useProviderLoginError = (showLoggedInfo: boolean) => {
+  const m = useTranslations("messages");
+
+  const { toast } = useToast();
   const params = useSearchParams();
   const session = useSession();
-  const { toast } = useToast();
-  const m = useTranslations("messages");
   const router = useRouter();
 
   useEffect(() => {

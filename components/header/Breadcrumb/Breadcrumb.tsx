@@ -4,36 +4,21 @@ import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { availableRoutesWithTranslation, BreadcrumbProps } from "./types";
 
-const availableRoutesWithTranslation = [
-  "dashboard",
-  "settings",
-  "security",
-  "theme",
-];
-
-interface Props {
-  addManualRoutes?: {
-    name: string;
-    href: string;
-    useTranslate?: boolean;
-    emoji?: string;
-  }[];
-  workspaceHref?: string;
-}
-
-export const Breadcrumb = ({ addManualRoutes, workspaceHref }: Props) => {
+export const Breadcrumb = ({
+  addManualRoutes,
+  workspaceHref,
+}: BreadcrumbProps) => {
   const t = useTranslations("routes");
 
   const paths = usePathname();
+  const excludedPaths = new Set(["en", "ru", "workspace"]);
   const pathNames = paths
     .split("/")
-    .filter(
-      (path: string) =>
-        path !== "ru" && path !== "workspace" && path.trim() !== ""
-    );
+    .filter((path) => !excludedPaths.has(path) && path.trim());
 
-  if (pathNames.length > 1) {
+  if (pathNames.length > 0) {
     return (
       <>
         {addManualRoutes ? (
@@ -101,4 +86,6 @@ export const Breadcrumb = ({ addManualRoutes, workspaceHref }: Props) => {
       </>
     );
   }
+
+  return null;
 };
