@@ -8,6 +8,9 @@ import { SavingStatus } from "../SavingStatus";
 import { OpenSidebar } from "../OpenSidebar";
 import { DashboardHeaderProps } from "./types";
 import { SignDocuments } from "../SignDocuments/SignDocuments";
+import { MeetingsTrigger } from "../MeetingsTrigger/MeetingsTrigger";
+import { Logo } from "@/components/common/Logo/Logo";
+import { Separator } from "@/components/ui/separator";
 
 export const DashboardHeader = async ({
   addManualRoutes,
@@ -29,6 +32,8 @@ export const DashboardHeader = async ({
       )}
     >
       <div className="flex items-center gap-2">
+        <Logo />
+        <Separator orientation="vertical" className="h-6 ml-1" />
         <OpenSidebar />
         <Welcoming
           hideOnMobile
@@ -50,6 +55,7 @@ export const DashboardHeader = async ({
       <div className="flex items-center gap-1 sm:gap-2">
         <div className="flex flex-wrap items-center gap-0.5 sm:gap-1">
           <SignDocuments />
+          <MeetingsTrigger />
           {children}
           <div>Notifications</div>
         </div>
