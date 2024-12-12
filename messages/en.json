@@ -267,6 +267,8 @@
   "sidebar": {
     "MAIN": {
       "HOME_HOVER": "Home",
+      "SETTINGS": "Settings",
+      "CHANGE_THEMES": "Change Theme",
       "LOG_OUT_HOVER": "Log out",
       "SETTINGS_HOVER": "Settings",
       "OPEN_CLOSE_SIDEBAR_HOVER": "Open | Close Sidebar",

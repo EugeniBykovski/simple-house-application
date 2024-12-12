@@ -8,15 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Laptop, Moon, Sun } from "lucide-react";
+import { themeColors, ThemeEnum } from "@/lib/theme";
 
-interface Props {
-  theme: "light" | "dark" | "system";
+interface ThemeCardProps {
+  theme: ThemeEnum;
   activeTheme?: string;
   onTheme: (theme: string) => void;
 }
 
-export const ThemeCard = ({ theme, activeTheme, onTheme }: Props) => {
+export const ThemeCard = ({ theme, activeTheme, onTheme }: ThemeCardProps) => {
   return (
     <Card
       tabIndex={1}
@@ -28,23 +28,33 @@ export const ThemeCard = ({ theme, activeTheme, onTheme }: Props) => {
       onClick={() => onTheme(theme)}
       className={`${
         activeTheme === theme ? "border-primary/50" : ""
-      } w-full max-w-sm sm:max-w-lg sm:w-[calc((100%/2)-1.5rem)] xl:w-[calc((100%/3)-1.5rem)] hover:bg-accent hover:text-accent-foreground duration-200 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background`}
+      } w-36 h-36 rounded-full flex justify-center items-center hover:opacity-85 transition duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background`}
+      style={theme ? { backgroundColor: themeColors[theme] } : undefined}
     >
-      <CardHeader className="flex flex-row itsme-center justify-between space-x-0 space-y-0">
-        <div className="flex items-center gap-2">
-          {theme === "light" && <Sun size={20} />}
-          {theme === "dark" && <Moon size={20} />}
-          {theme === "system" && <Laptop size={20} />}
-          <CardTitle className="text-xl">
-            {theme[0].toUpperCase() + theme.slice(1)} theme
+      <CardHeader className="flex flex-col items-center justify-between">
+        <div className="flex items-center">
+          <CardTitle
+            className="text-lg"
+            style={
+              theme === ThemeEnum.LIGHT
+                ? { color: "#18181b" }
+                : { color: "#fffffF" }
+            }
+          >
+            {theme[0].toUpperCase() + theme.slice(1)}
           </CardTitle>
         </div>
-        {activeTheme === theme && <Badge variant={"default"}>Active</Badge>}
+        <Badge
+          variant="default"
+          className={`transition-opacity duration-500 ease-in-out ${
+            activeTheme === theme
+              ? "opacity-100 scale-100 block"
+              : "opacity-0 scale-90 hidden"
+          }`}
+        >
+          Active
+        </Badge>
       </CardHeader>
-      <CardContent className="h-44"></CardContent>
-      <CardFooter>
-        <p>Default {theme}</p>
-      </CardFooter>
     </Card>
   );
 };

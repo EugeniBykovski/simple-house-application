@@ -3,7 +3,11 @@
 import { topSidebarLinks } from "@/lib/constants";
 import { SidebarLink } from "./SidebarLink";
 
-export const Top = () => {
+interface TopProps {
+  isCollapsed: boolean;
+}
+
+export const Top = ({ isCollapsed }: TopProps) => {
   return (
     <div className="flex flex-col items-center gap-3">
       {topSidebarLinks.map((link, i) => (
@@ -12,7 +16,8 @@ export const Top = () => {
           Icon={link.Icon}
           hoverTextKey={link.hoverTextKey}
           href={link.href}
-          include={link?.include}
+          // include={link?.include}
+          isCollapsed={isCollapsed}
         />
       ))}
     </div>

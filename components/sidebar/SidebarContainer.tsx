@@ -30,7 +30,7 @@ export const SidebarContainer = ({
           userWorkspaces={userWorkspaces ? userWorkspaces : []}
         />
         <OptionsSidebar
-        // createdWorkspaces={createdWorkspaces.length}
+        // createdWorkspaces={}
         // userAdminWorkspaces={userAdminWorkspaces}
         // userWorkspaces={userWorkspaces}
         />

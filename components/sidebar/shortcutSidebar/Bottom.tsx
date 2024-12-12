@@ -8,7 +8,18 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { ArrowRightLeft, LogOutIcon, Settings2 } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { ArrowRightLeft, LogOutIcon, Palette, Settings2 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -24,52 +35,89 @@ export const Bottom = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <HoverCard openDelay={250} closeDelay={250}>
-        <HoverCardTrigger>
-          <LocaleSwitcher
-            textSize="text-lg"
-            alignHover="start"
-            alignDropdown="start"
-            variant={"ghost"}
-            size={"icon"}
-          />
-        </HoverCardTrigger>
-        <HoverCardContent align="start">
-          <span>{t("MAIN.CHANGE_LANG_HOVER")}</span>
-        </HoverCardContent>
-      </HoverCard>
-      <HoverCard openDelay={250} closeDelay={250}>
-        <HoverCardTrigger tabIndex={1}>
-          <Button onClick={toggleSidebar} variant={"ghost"} size={"icon"}>
-            <ArrowRightLeft />
-          </Button>
-        </HoverCardTrigger>
-        <HoverCardContent align="start">
-          <span>{t("MAIN.OPEN_CLOSE_SIDEBAR_HOVER")}</span>
-        </HoverCardContent>
-      </HoverCard>
-      <HoverCard openDelay={250} closeDelay={250}>
-        <HoverCardTrigger tabIndex={1}>
-          <Button onClick={logOutHandler} variant={"ghost"} size={"icon"}>
-            <LogOutIcon />
-          </Button>
-        </HoverCardTrigger>
-      </HoverCard>
-      <HoverCard openDelay={250} closeDelay={250}>
-        <HoverCardTrigger tabIndex={2}>
-          <ActiveLink
-            include="settings"
-            variant={"ghost"}
-            size={"icon"}
-            href="/dashboard/settings"
-          >
-            <Settings2 />
-          </ActiveLink>
-        </HoverCardTrigger>
-        <HoverCardContent align="start">
-          <span>{t("MAIN.SETTINGS_HOVER")}</span>
-        </HoverCardContent>
-      </HoverCard>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div>
+              <LocaleSwitcher
+                textSize="text-lg"
+                alignHover="start"
+                alignDropdown="start"
+                variant={"ghost"}
+                size={"icon"}
+              />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <span>{t("MAIN.CHANGE_LANG_HOVER")}</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button onClick={toggleSidebar} variant={"ghost"} size={"icon"}>
+              <ArrowRightLeft />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <span>{t("MAIN.OPEN_CLOSE_SIDEBAR_HOVER")}</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <ActiveLink
+              include="settings"
+              variant={"ghost"}
+              size={"icon"}
+              href="/dashboard/settings"
+            >
+              <Settings2 />
+            </ActiveLink>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <span>{t("MAIN.SETTINGS_HOVER")}</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Popover>
+              <PopoverTrigger asChild>
+                <ActiveLink
+                  include="theme"
+                  variant="ghost"
+                  size="icon"
+                  href="#"
+                >
+                  <Palette />
+                </ActiveLink>
+              </PopoverTrigger>
+              <PopoverContent side="right">
+                Place content for the popover here.
+              </PopoverContent>
+            </Popover>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <span>{t("MAIN.CHANGE_THEMES")}</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button onClick={logOutHandler} variant={"ghost"} size={"icon"}>
+              <LogOutIcon />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <span>{t("MAIN.LOG_OUT_HOVER")}</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };
