@@ -35,6 +35,7 @@ export default async function RootLayout(props: {
 
   // @ts-ignore
   const messages = await getMessages(locale).catch(() => getMessages("en"));
+  const defaultTheme = "light";
 
   return (
     <html lang={locale}>
@@ -50,7 +51,7 @@ export default async function RootLayout(props: {
             <QueryProvider>
               <ThemeProvider
                 attribute="class"
-                defaultTheme="system"
+                defaultTheme={defaultTheme}
                 enableSystem
                 disableTransitionOnChange
               >
