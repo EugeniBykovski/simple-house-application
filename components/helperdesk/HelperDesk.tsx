@@ -21,7 +21,7 @@ export const HelperDesk: FC = () => {
   return (
     <Sheet>
       <SheetTrigger>
-        <div className="fixed bottom-2 right-2 p-2 border rounded-xl border-dashed border-zinc-300 cursor-pointer hover:border-green-300 transition">
+        <div className="fixed bottom-2 right-4 p-[4px] border rounded-lg border-dashed border-zinc-300 cursor-pointer hover:border-green-300 transition">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger className="flex justify-center items-center">

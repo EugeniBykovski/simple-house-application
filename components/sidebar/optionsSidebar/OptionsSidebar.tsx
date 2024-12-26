@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Settings } from "./settingsOptions/Settings";
 import { Workspace } from "@prisma/client";
+import { Advertisements } from "./advertisementSection/Advertisements";
 
 interface Props {
   createdWorkspaces: number;
@@ -26,8 +27,7 @@ export const OptionsSidebar = ({
           <Settings userAdminWorkspaces={userAdminWorkspaces} />
         )}
       </ScrollArea>
+      <Advertisements />
     </div>
   );
 };
-
-export default OptionsSidebar;

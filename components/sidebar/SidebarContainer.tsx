@@ -4,7 +4,7 @@ import { useToggleSidebar } from "@/context/ToggleSidebar";
 import { Workspace } from "@prisma/client";
 import { CloseSidebar } from "./CloseSidebar";
 import { ShortcutSidebar } from "./shortcutSidebar/ShortcutSidebar";
-import OptionsSidebar from "./optionsSidebar/OptionsSidebar";
+import { OptionsSidebar } from "./optionsSidebar/OptionsSidebar";
 
 interface Props {
   userWorkspaces: Workspace[];

@@ -305,6 +305,9 @@
       "ADD_MIND_MAP": "Add mind map"
     }
   },
+  "advertisement": {
+    "title": "Advertisement"
+  },
   "settings": {
     "ACCOUNT": {
       "TITLE": "Account",
