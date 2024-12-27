@@ -39,7 +39,7 @@ export const LocaleSwitcher = ({
             {isLoading ? (
               <LoadingState className="mr-0" />
             ) : (
-              locale.toUpperCase()
+              <span className="text-sm">{locale.toUpperCase()}</span>
             )}
             <span className="sr-only">{t("LANG_HOVER")}</span>
           </Button>

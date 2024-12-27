@@ -1,13 +1,9 @@
 "use client";
 
+import { Theme } from "@/components/settings/theme/Theme";
 import { LocaleSwitcher } from "@/components/switchers/LocaleSwitcher/LocaleSwitcher";
 import ActiveLink from "@/components/ui/active-link";
 import { Button } from "@/components/ui/button";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import {
   Popover,
   PopoverContent,
@@ -96,8 +92,8 @@ export const Bottom = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
                   <Palette />
                 </ActiveLink>
               </PopoverTrigger>
-              <PopoverContent side="right">
-                Place content for the popover here.
+              <PopoverContent side="right" className="w-48 ml-4">
+                <Theme size="small" />
               </PopoverContent>
             </Popover>
           </TooltipTrigger>

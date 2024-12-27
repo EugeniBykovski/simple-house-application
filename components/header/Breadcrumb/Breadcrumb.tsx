@@ -22,7 +22,7 @@ export const Breadcrumb = ({
     return (
       <>
         {addManualRoutes ? (
-          <div className="flex flex-col items-start gap-0.5 sm:flex-row sm:items-center">
+          <div className="hidden md:flex flex-col items-start gap-0.5 md:flex-row">
             {addManualRoutes.map((route, i) => {
               return (
                 <div
@@ -50,7 +50,7 @@ export const Breadcrumb = ({
             })}
           </div>
         ) : (
-          <div className="flex flex-col items-start gap-0.5 text-sm sm:text-base sm:flex-row sm:items-center">
+          <div className="hidden md:flex flex-col items-start gap-0.5 text-sm md:text-base md:flex-row md:items-center">
             {pathNames.map((link: any, i: any) => {
               const href = `/${pathNames.slice(0, i + 1).join("/")}`;
               return (

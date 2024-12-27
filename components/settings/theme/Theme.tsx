@@ -13,7 +13,11 @@ import { ThemeCard } from "./ThemeCard";
 import { LoadingState } from "@/components/ui/loadingState";
 import { ThemeEnum } from "@/lib/theme";
 
-export const Theme = () => {
+interface ThemeProps {
+  size?: "small" | "large";
+}
+
+export const Theme = ({ size = "large" }: ThemeProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -28,22 +32,32 @@ export const Theme = () => {
       </div>
     );
   }
+
   return (
     <Card className="bg-background border-none shadow-none">
-      <CardHeader>
-        <CardTitle>Theme</CardTitle>
-        <CardDescription className="text-base">
-          Select how you would like your interface to look. Select theme from
-          dark, light or system.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-wrap justify-center gap-6">
+      {size === "large" && (
+        <CardHeader>
+          <CardTitle className="text-xl">Change your theme:</CardTitle>
+          <CardDescription className="text-base">
+            Select how you would like your interface to look. Select theme from
+            dark, light or other themes.
+          </CardDescription>
+        </CardHeader>
+      )}
+      <CardContent
+        className={`${
+          size === "large"
+            ? "lg:w-[50%] md:w-[80%] m-auto grid md:grid-cols-3 sm:grid-cols-1 grid-rows-3"
+            : "grid grid-cols-2"
+        } place-items-center gap-6`}
+      >
         {Object.values(ThemeEnum).map((themeKey) => (
           <ThemeCard
             key={themeKey}
             onTheme={setTheme}
             theme={themeKey}
             activeTheme={theme}
+            size={size}
           />
         ))}
       </CardContent>

@@ -1,11 +1,11 @@
-import { checkIfUserCompletedOnboarding } from "@/lib/checkIfUserCompletedOnboarding";
+import { DashboardHeader } from "@/components/header/DashboardHeader/DashboardHeader";
 
 const SecuritySettings = async () => {
-  const session = await checkIfUserCompletedOnboarding("/dashboard/settings");
-
   return (
     <>
-      <div>DashboardHeader</div>
+      <DashboardHeader>
+        <div>AddTaskShortcut</div>
+      </DashboardHeader>
       <div>AddTaskShortcut</div>
       <div>SecurityCard</div>
     </>
