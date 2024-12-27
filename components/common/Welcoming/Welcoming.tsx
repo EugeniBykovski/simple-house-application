@@ -33,7 +33,7 @@ const Welcoming = forwardRef<HTMLDivElement, WelcomingProps>(
           className={cn(`space-y-1 text-left`, className)}
           {...props}
         >
-          <p className="font-bold text-zinc-400 sm:text-2xl text-xl">
+          <p className="font-bold text-zinc-400 sm:text-xl text-lg">
             {t("WELCOMEBACK")},{" "}
             <span className="text-zinc-600">
               {name

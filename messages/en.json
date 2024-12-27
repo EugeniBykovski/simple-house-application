@@ -258,6 +258,7 @@
     "SETTINGS": "Settings",
     "SECURITY": "Security",
     "THEME": "Theme",
+    "BILLING": "Billing",
     "TASKS": "Tasks",
     "UNTITLED": "Untitled",
     "POMODORO": "Pomodoro",
@@ -286,6 +287,7 @@
       "ACCOUNT": "Account",
       "SECURITY": "Security",
       "THEME": "Theme",
+      "BILLING": "Billing",
       "WORKSPACE": "Workspace"
     },
     "POMODORO": {
@@ -321,6 +323,7 @@
       "SURNAME_PLACEHOLDER": "Surname",
       "LANG": "LANGUAGE",
       "SEARCH_LANGUAGE": "Search language...",
+      "NO_LANGUAGE": "No kanguage...",
       "SELECT_LANGUAGE": "Select language",
       "UPDATE_BTN": "Update",
       "DELETE_TITLE": "Delete account",
