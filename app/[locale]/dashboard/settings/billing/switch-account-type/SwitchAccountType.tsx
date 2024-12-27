@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import Link from "next/link";
 import { PackagePlus } from "lucide-react";
 
