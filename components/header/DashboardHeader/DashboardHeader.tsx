@@ -1,6 +1,6 @@
 import { getAuthSession } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import { User } from "../User";
+import { User } from "../User/User";
 import { BackButton } from "../BackButton";
 import { Breadcrumb } from "../Breadcrumb/Breadcrumb";
 import Welcoming from "../../common/Welcoming/Welcoming";

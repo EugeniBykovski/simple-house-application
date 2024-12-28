@@ -1,6 +1,15 @@
 "use client";
 
-import { Check, Globe, LogOut, Moon, Settings2, Sun } from "lucide-react";
+import {
+  Check,
+  CheckCheck,
+  Copy,
+  Globe,
+  LogOut,
+  Moon,
+  Settings2,
+  Sun,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +22,8 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { UserAvatar } from "../ui/user-avatar";
+} from "../../ui/dropdown-menu";
+import { UserAvatar } from "../../ui/user-avatar";
 import { useTheme } from "next-themes";
 import { useChangeLocale } from "@/hooks/useChangeLocale";
 import { useLocale, useTranslations } from "next-intl";
@@ -22,27 +31,22 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Span } from "next/dist/trace";
-
-interface Props {
-  profileImage?: string | null;
-  username: string;
-  email: string;
-  isOnline?: boolean;
-}
-
-interface User {
-  id: string;
-  username: string;
-  image: string | null;
-}
+import { Button } from "../../ui/button";
+import { UserData, UserProps } from "./types";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useCopyToClipboard } from "@/hooks/use-copy-clipboard";
 
 export const User = ({
   profileImage,
   username,
   email,
   isOnline: initialIsOnline,
-}: Props) => {
+}: UserProps) => {
   const t = useTranslations("common");
 
   const [isOnline, setIsOnline] = useState(initialIsOnline);
@@ -50,6 +54,11 @@ export const User = ({
   const lang = useLocale();
   const { theme, setTheme } = useTheme();
   const { onSelectChange } = useChangeLocale();
+
+  const { copyToClipboard, copiedField } = useCopyToClipboard();
+  const handleCopy = (text: string, field: "username" | "email") => {
+    copyToClipboard(text, field);
+  };
 
   const logOutHandler = async () => {
     try {
@@ -75,7 +84,7 @@ export const User = ({
 
         const data = await res.json();
         const currentUser = data.onlineUsers.find(
-          (user: User) => user.username === username
+          (user: UserData) => user.username === username
         );
 
         if (currentUser) {
@@ -88,11 +97,9 @@ export const User = ({
 
     fetchUserStatus();
 
-    const interval = setInterval(fetchUserStatus, 10000);
+    const interval = setInterval(fetchUserStatus, 60000);
     return () => clearInterval(interval);
   }, [username]);
-
-  console.log("Session User isOnline:", isOnline);
 
   return (
     <DropdownMenu>
@@ -131,6 +138,7 @@ export const User = ({
             <span className="text-sx text-zinc-300">Offline</span>
           )}
         </div>
+
         <div className="flex items-center gap-1 px-2">
           {profileImage ? (
             <Image
@@ -143,10 +151,55 @@ export const User = ({
           ) : (
             <UserAvatar className="w-8 h-8" />
           )}
-
           <div className="py-1">
-            <DropdownMenuLabel className="py-0">{username}</DropdownMenuLabel>
-            <DropdownMenuLabel className="py-0">{email}</DropdownMenuLabel>
+            <div className="flex items-center gap-1">
+              <DropdownMenuLabel className="py-0">{username}</DropdownMenuLabel>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      size={"sm"}
+                      variant={"link"}
+                      className="hover:text-green-400 p-0"
+                      onClick={() => handleCopy(username, "username")}
+                    >
+                      {copiedField === "username" ? (
+                        <CheckCheck size={16} className="text-green-400" />
+                      ) : (
+                        <Copy size={16} />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Copy</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <div className="flex items-center gap-1">
+              <DropdownMenuLabel className="py-0">{email}</DropdownMenuLabel>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      size={"sm"}
+                      variant={"link"}
+                      className="hover:text-green-400 p-0"
+                      onClick={() => handleCopy(email, "email")}
+                    >
+                      {copiedField === "email" ? (
+                        <CheckCheck size={16} className="text-green-400" />
+                      ) : (
+                        <Copy size={16} />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Copy</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
         </div>
         <DropdownMenuSeparator />
