@@ -93,6 +93,9 @@ export const Bottom = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
                 </ActiveLink>
               </PopoverTrigger>
               <PopoverContent side="right" className="w-48 ml-4">
+                <h3 className="mb-6 text-sm text-zinc-500 flex justify-center">
+                  Choose your theme:
+                </h3>
                 <Theme size="small" />
               </PopoverContent>
             </Popover>

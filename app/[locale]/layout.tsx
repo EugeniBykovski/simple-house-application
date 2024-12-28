@@ -11,6 +11,8 @@ import { getMessages } from "next-intl/server";
 import { AuthProvider } from "@/providers/AuthProvider/AuthProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryProvider } from "@/providers/QueryProvider/QueryProvider";
+import { useOnlineStatus } from "@/hooks/use-online-status";
+import { OnlineStatusProvider } from "@/providers/OnlineStatusProvider/OnlineStatusProvider";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 const locales = ["en", "ru"];
@@ -55,10 +57,12 @@ export default async function RootLayout(props: {
                 enableSystem
                 disableTransitionOnChange
               >
-                <Toaster />
-                <main className="w-full min-h-[calc(100vh-3.5rem-1px)] text-center">
-                  {props.children}
-                </main>
+                <OnlineStatusProvider>
+                  <Toaster />
+                  <main className="w-full min-h-[calc(100vh-3.5rem-1px)] text-center">
+                    {props.children}
+                  </main>
+                </OnlineStatusProvider>
               </ThemeProvider>
             </QueryProvider>
           </AuthProvider>

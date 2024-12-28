@@ -63,6 +63,7 @@ export const DashboardHeader = async ({
           profileImage={session?.user.image}
           username={session.user.username!}
           email={session.user.email!}
+          isOnline={session.user.isOnline}
         />
       </div>
     </header>

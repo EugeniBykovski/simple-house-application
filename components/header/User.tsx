@@ -21,42 +21,116 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Span } from "next/dist/trace";
 
 interface Props {
   profileImage?: string | null;
   username: string;
   email: string;
+  isOnline?: boolean;
 }
 
-export const User = ({ profileImage, username, email }: Props) => {
+interface User {
+  id: string;
+  username: string;
+  image: string | null;
+}
+
+export const User = ({
+  profileImage,
+  username,
+  email,
+  isOnline: initialIsOnline,
+}: Props) => {
   const t = useTranslations("common");
+
+  const [isOnline, setIsOnline] = useState(initialIsOnline);
 
   const lang = useLocale();
   const { theme, setTheme } = useTheme();
   const { onSelectChange } = useChangeLocale();
 
-  const logOutHandler = () => {
-    signOut({
-      callbackUrl: `${window.location.origin}/${lang}`,
-    });
+  const logOutHandler = async () => {
+    try {
+      await fetch("/api/update-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isOnline: false }),
+      });
+
+      signOut();
+    } catch (error) {
+      console.error("Failed to update online status during logout:", error);
+    }
   };
+
+  useEffect(() => {
+    const fetchUserStatus = async () => {
+      try {
+        const res = await fetch("/api/get-online-users");
+        if (!res.ok) {
+          throw new Error("Failed to fetch online users");
+        }
+
+        const data = await res.json();
+        const currentUser = data.onlineUsers.find(
+          (user: User) => user.username === username
+        );
+
+        if (currentUser) {
+          setIsOnline(currentUser.isOnline);
+        }
+      } catch (error) {
+        console.error("Error fetching user status:", error);
+      }
+    };
+
+    fetchUserStatus();
+
+    const interval = setInterval(fetchUserStatus, 10000);
+    return () => clearInterval(interval);
+  }, [username]);
+
+  console.log("Session User isOnline:", isOnline);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background ml-2">
         {profileImage ? (
-          <Image
-            src={profileImage}
-            alt="profile image"
-            className="w-10 h-10 rounded-full object-cover"
-            width={300}
-            height={300}
-          />
+          <div className="relative">
+            <Image
+              src={profileImage}
+              alt="profile image"
+              className="w-10 h-10 rounded-full object-cover"
+              width={300}
+              height={300}
+            />
+            <span
+              className={`w-2 h-2 rounded-full absolute -top-1 right-0 ${
+                isOnline ? "bg-green-400" : "bg-red-400"
+              }`}
+            ></span>
+          </div>
         ) : (
-          <UserAvatar className="w-8 h-8" />
+          <div className="relative">
+            <UserAvatar className="w-8 h-8" />
+            <span
+              className={`w-2 h-2 rounded-full absolute -top-1 right-0 ${
+                isOnline ? "bg-green-400" : "bg-red-400"
+              }`}
+            ></span>
+          </div>
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" sideOffset={10} className="">
+        <div className="px-2">
+          {isOnline ? (
+            <span className="text-xs text-green-400">Online</span>
+          ) : (
+            <span className="text-sx text-zinc-300">Offline</span>
+          )}
+        </div>
         <div className="flex items-center gap-1 px-2">
           {profileImage ? (
             <Image
@@ -70,9 +144,9 @@ export const User = ({ profileImage, username, email }: Props) => {
             <UserAvatar className="w-8 h-8" />
           )}
 
-          <div>
-            <DropdownMenuLabel>{username}</DropdownMenuLabel>
-            <DropdownMenuLabel>{email}</DropdownMenuLabel>
+          <div className="py-1">
+            <DropdownMenuLabel className="py-0">{username}</DropdownMenuLabel>
+            <DropdownMenuLabel className="py-0">{email}</DropdownMenuLabel>
           </div>
         </div>
         <DropdownMenuSeparator />

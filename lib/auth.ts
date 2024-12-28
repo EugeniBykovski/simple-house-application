@@ -83,39 +83,76 @@ export const authOptions: NextAuthOptions = {
         session.user.username = token.username;
         session.user.surname = token.surname;
         session.user.completedOnboarding = !!token.completedOnboarding;
+        session.user.isOnline = !!token.isOnline;
       }
 
       const user = await db.user.findUnique({
-        where: {
-          id: token.id,
-        },
+        where: { id: token.id as string },
       });
 
       if (user) {
         session.user.image = user.image;
         session.user.completedOnboarding = user.completedOnboarding;
         session.user.username = user.username;
+        session.user.isOnline = user.isOnline;
       }
 
       return session;
     },
-    async jwt({ token, user }) {
-      const dbUser = await db.user.findFirst({
-        where: {
-          email: token.email,
-        },
-      });
+    // async jwt({ token, user }) {
+    //   const dbUser = await db.user.findFirst({
+    //     where: {
+    //       email: token.email,
+    //     },
+    //   });
 
-      if (!dbUser) {
-        token.id = user!.id;
+    //   if (!dbUser) {
+    //     token.id = user!.id;
+    //     return token;
+    //   }
+
+    //   return {
+    //     id: dbUser.id,
+    //     username: dbUser.username,
+    //     email: dbUser.email,
+    //     picture: dbUser.image,
+    //     isOnline: dbUser.isOnline,
+    //   };
+    // },
+
+    async jwt({ token, user }) {
+      if (user) {
+        const dbUser = await db.user.findFirst({
+          where: { email: token.email },
+        });
+
+        if (!dbUser) {
+          token.id = user!.id;
+          return token;
+        }
+
+        if (dbUser) {
+          await db.user.update({
+            where: { id: dbUser.id },
+            data: { isOnline: true },
+          });
+
+          return {
+            id: dbUser.id,
+            username: dbUser.username,
+            email: dbUser.email,
+            picture: dbUser.image,
+            isOnline: true,
+          };
+        }
+
+        token.id = user.id as string;
         return token;
       }
 
       return {
-        id: dbUser.id,
-        username: dbUser.username,
-        email: dbUser.email,
-        picture: dbUser.image,
+        ...token,
+        isOnline: token.isOnline || false,
       };
     },
   },

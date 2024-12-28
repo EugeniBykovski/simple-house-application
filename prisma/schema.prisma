@@ -22,6 +22,7 @@ model User {
   createdWorkspaces Workspace[] @relation("CreatedBy")
   subscriptions Subscription[]
   useCase UseCase?
+  isOnline      Boolean         @default(false)
 
   PomodoroSettings PomodoroSettings[]
 }
