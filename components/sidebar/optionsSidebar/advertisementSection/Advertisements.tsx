@@ -29,7 +29,7 @@ export const Advertisements: FC = () => {
 
   return (
     <div className="border-t border-dashed border-zinc-300">
-      <Accordion type="single" collapsible defaultValue="bestAdvertisements">
+      <Accordion type="single" collapsible asChild>
         <AccordionItem value="bestAdvertisements">
           <p className="text-xs sm:text-sm uppercase text-muted-foreground flex justify-center items-center mt-4">
             {t("title")}
@@ -61,7 +61,7 @@ export const Advertisements: FC = () => {
             </Dialog>
           </p>
           <AccordionTrigger className="text-xs text-zinc-400 px-0 pb-2 pt-0">
-            View all ads:
+            View all:
           </AccordionTrigger>
           <AccordionContent>
             <BestAdvertisements />
