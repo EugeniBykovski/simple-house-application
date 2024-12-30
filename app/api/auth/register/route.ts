@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { signUpSchema } from "@/schema/signUpSchema";
 import { NextResponse } from "next/server";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
   const body: unknown = await request.json();

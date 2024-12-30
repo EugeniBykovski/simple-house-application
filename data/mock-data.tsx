@@ -1,4 +1,22 @@
+import {
+  acmeLogo,
+  apexLogo,
+  celestialLogo,
+  echoLogo,
+  pulseLogo,
+  quantumLogo,
+} from "@/public/assets";
+
 export const supportedLocales = ["en", "ru"];
+
+export const logos = [
+  { src: acmeLogo, alt: "acme logo" },
+  { src: quantumLogo, alt: "quantum logo" },
+  { src: echoLogo, alt: "echo logo" },
+  { src: celestialLogo, alt: "celestial logo" },
+  { src: pulseLogo, alt: "pulse logo" },
+  { src: apexLogo, alt: "apex logo" },
+];
 
 export const advertisements = [
   {

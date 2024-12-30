@@ -259,6 +259,7 @@
     "SECURITY": "Security",
     "THEME": "Theme",
     "BILLING": "Billing",
+    "ADVERTS": "Adverts",
     "TASKS": "Tasks",
     "UNTITLED": "Untitled",
     "POMODORO": "Pomodoro",
@@ -288,6 +289,7 @@
       "SECURITY": "Security",
       "THEME": "Theme",
       "BILLING": "Billing",
+      "ADVERTS": "Adverts",
       "WORKSPACE": "Workspace"
     },
     "POMODORO": {

@@ -25,6 +25,17 @@ model User {
   isOnline      Boolean         @default(false)
 
   PomodoroSettings PomodoroSettings[]
+  AdvertMessage AdvertMessage[]
+}
+
+model AdvertMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
  
 model Account {
