@@ -7,10 +7,16 @@ interface AdvertsTextSliderProps {
   className?: string;
 }
 
+interface AdvertMessage {
+  content: string;
+  username: string;
+  phone?: string | null;
+}
+
 export const AdvertsTextSlider: FC<AdvertsTextSliderProps> = ({
   className,
 }) => {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<AdvertMessage[]>([]);
   const [_, setError] = useState<string | null>(null);
 
   const fetchMessages = useCallback(async () => {
@@ -20,8 +26,8 @@ export const AdvertsTextSlider: FC<AdvertsTextSliderProps> = ({
         throw new Error("Failed to fetch messages");
       }
 
-      const data = await res.json();
-      setMessages(data.map((msg: { content: string }) => msg.content));
+      const data: AdvertMessage[] = await res.json();
+      setMessages(data);
     } catch (error) {
       console.error("Error fetching messages:", error);
       setError("Failed to load messages");
@@ -32,7 +38,6 @@ export const AdvertsTextSlider: FC<AdvertsTextSliderProps> = ({
     fetchMessages();
 
     const interval = setInterval(fetchMessages, 60000);
-
     return () => clearInterval(interval);
   }, [fetchMessages]);
 
@@ -53,7 +58,8 @@ export const AdvertsTextSlider: FC<AdvertsTextSliderProps> = ({
         >
           {messages.concat(messages).map((message, idx) => (
             <span key={idx} className="text-zinc-600 text-lg">
-              {message}
+              {message.username}: {message.content}{" "}
+              {message.phone && `(${message.phone})`}
             </span>
           ))}
         </motion.div>

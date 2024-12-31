@@ -5,10 +5,19 @@ import { getAuthSession } from "@/lib/auth";
 export async function GET() {
   try {
     const messages = await prisma.advertMessage.findMany({
+      include: {
+        user: { select: { username: true } },
+      },
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(messages);
+    return NextResponse.json(
+      messages.map((msg) => ({
+        content: msg.content,
+        username: msg.user.username,
+        phone: msg.phone,
+      }))
+    );
   } catch (error) {
     console.error("Error fetching messages:", error);
     return NextResponse.json(
@@ -26,17 +35,28 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { content } = await req.json();
+    const { message, phone } = await req.json();
 
-    if (!content) {
+    if (!message) {
       return NextResponse.json(
-        { error: "Content is required" },
+        { error: "Message is required" },
+        { status: 400 }
+      );
+    }
+
+    if (phone && typeof phone !== "string") {
+      return NextResponse.json(
+        { error: "Phone must be a string" },
         { status: 400 }
       );
     }
 
     const newMessage = await prisma.advertMessage.create({
-      data: { userId: session.user.id, content },
+      data: {
+        userId: session.user.id,
+        content: message,
+        phone: phone || null,
+      },
     });
 
     return NextResponse.json(newMessage);
