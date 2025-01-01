@@ -16,6 +16,8 @@ model User {
   emailVerified DateTime?
   hashedPassword String?
   image         String?
+  voucher       Boolean         @default(false) 
+  voucherCode   String?  
   completedOnboarding Boolean   @default(false)
   accounts      Account[]
   sessions      Session[]
@@ -33,6 +35,7 @@ model AdvertMessage {
   userId    String
   content   String
   phone     String?
+  voucherCode String?
   createdAt DateTime @default(now())
   expiresAt DateTime @default(dbgenerated("NOW() + INTERVAL '1 day'"))
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)

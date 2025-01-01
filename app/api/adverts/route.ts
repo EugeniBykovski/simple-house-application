@@ -40,11 +40,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { message, phone } = await req.json();
+    const { message, phone, voucherCode } = await req.json();
 
     if (!message) {
       return NextResponse.json(
         { error: "Message is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!voucherCode || voucherCode.length !== 6) {
+      return NextResponse.json(
+        { error: "Invalid voucher code" },
         { status: 400 }
       );
     }
@@ -62,6 +69,7 @@ export async function POST(req: Request) {
         userId: session.user.id,
         content: message,
         phone: phone || null,
+        voucherCode: voucherCode,
         expiresAt: expiresAt,
       },
     });
