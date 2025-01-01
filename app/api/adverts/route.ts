@@ -8,6 +8,11 @@ export async function GET() {
       include: {
         user: { select: { username: true } },
       },
+      where: {
+        expiresAt: {
+          gt: new Date(),
+        },
+      },
       orderBy: { createdAt: "desc" },
     });
 
@@ -51,11 +56,13 @@ export async function POST(req: Request) {
       );
     }
 
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
     const newMessage = await prisma.advertMessage.create({
       data: {
         userId: session.user.id,
         content: message,
         phone: phone || null,
+        expiresAt: expiresAt,
       },
     });
 
