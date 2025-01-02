@@ -5,6 +5,7 @@ export const availableRoutesWithTranslation = [
   "theme",
   "billing",
   "adverts",
+  "paymentDetails",
 ];
 
 export interface BreadcrumbProps {

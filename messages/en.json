@@ -260,6 +260,7 @@
     "THEME": "Theme",
     "BILLING": "Billing",
     "ADVERTS": "Adverts",
+    "PAYMENTDETAILS": "PaymentDetails",
     "TASKS": "Tasks",
     "UNTITLED": "Untitled",
     "POMODORO": "Pomodoro",
@@ -290,6 +291,7 @@
       "THEME": "Theme",
       "BILLING": "Billing",
       "ADVERTS": "Adverts",
+      "PAYMENT_DETAILS": "Payment Details",
       "WORKSPACE": "Workspace"
     },
     "POMODORO": {
