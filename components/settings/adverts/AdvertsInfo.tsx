@@ -1,3 +1,5 @@
+import { Label } from "@/components/ui/label";
+import { TriangleAlert } from "lucide-react";
 import { FC } from "react";
 
 const AdvertsInfo: FC = () => {
@@ -26,6 +28,10 @@ const AdvertsInfo: FC = () => {
           kg. Call now to order: (123) 456-7890."
         </p>
       </div>
+      <Label className="flex justify-start items-center my-4 text-red-500">
+        <TriangleAlert className="w-4 h-4 text-red-500 mr-2 text-left" />
+        Once you receive your voucher, it will be available for 8 hours
+      </Label>
     </div>
   );
 };

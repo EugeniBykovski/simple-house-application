@@ -18,6 +18,8 @@ model User {
   image         String?
   voucher       Boolean         @default(false) 
   voucherCode   String?  
+  checks        Check[] 
+  paymentDetails  PaymentDetails? 
   completedOnboarding Boolean   @default(false)
   accounts      Account[]
   sessions      Session[]
@@ -28,6 +30,23 @@ model User {
 
   PomodoroSettings PomodoroSettings[]
   AdvertMessage AdvertMessage[]
+}
+
+model Check {
+  id        String   @id @default(cuid())
+  userId    String
+  status    String
+  amount    Float
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PaymentDetails {
+  id        String   @id @default(cuid())
+  userId    String @unique
+  totalAmount Float
+  lastPaymentDate DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model AdvertMessage {

@@ -58,11 +58,22 @@ export const Adverts = () => {
         variant: "destructive",
       });
     },
-    onSuccess: () => {
+    onSuccess: (newAdvert) => {
       toast({
         title: "Advert submitted successfully",
         description: "It will be visible after moderation.",
       });
+
+      axios
+        .post("/api/checks", {
+          userId: newAdvert.userId,
+          status: "success",
+          amount: 2,
+        })
+        .then(() => {
+          router.refresh();
+        });
+
       form.reset();
       setVoucherCode(null);
       router.refresh();
@@ -128,7 +139,7 @@ export const Adverts = () => {
                 <Button
                   type="submit"
                   disabled={!voucherCode || isPending}
-                  className="bg-green-400"
+                  className="bg-green-500"
                 >
                   {isPending ? "Submitting..." : "Submit"}
                 </Button>

@@ -65,11 +65,12 @@ const AdvertsPrice: FC<AdvertsPriceProps> = ({
       <Button
         type="button"
         variant="default"
-        className="bg-orange-400 w-full"
+        className="bg-orange-400 w-full hover:bg-orange-300 transition"
         onClick={handleGetVoucher}
       >
         Get a voucher
       </Button>
+
       {voucherCode && (
         <div className="mt-4">
           <Label className="block text-sm font-medium text-gray-700">
