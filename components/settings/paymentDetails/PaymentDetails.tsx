@@ -1,5 +1,5 @@
 import { FC } from "react";
 
 export const PaymentDetails: FC = () => {
-  return <div>PaymentDetails</div>;
+  return <div>Table for Payment Details</div>;
 };

@@ -64,6 +64,7 @@ export const Adverts = () => {
         description: "It will be visible after moderation.",
       });
       form.reset();
+      setVoucherCode(null);
       router.refresh();
     },
   });
