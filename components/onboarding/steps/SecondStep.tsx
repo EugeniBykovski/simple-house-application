@@ -43,7 +43,12 @@ export const SecondStep = () => {
             contractCode: data.contractCode,
           },
         });
-        dispatch({ type: ActionType.CHANGE_SITE, payload: currentStep + 1 });
+
+        if (response.data.workspaceId) {
+          dispatch({ type: ActionType.CHANGE_SITE, payload: currentStep + 2 });
+        } else {
+          dispatch({ type: ActionType.CHANGE_SITE, payload: currentStep + 1 });
+        }
       } else {
         console.error("Failed to submit address:", response.data);
       }

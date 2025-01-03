@@ -84,10 +84,13 @@ export const authOptions: NextAuthOptions = {
         session.user.surname = token.surname;
         session.user.completedOnboarding = !!token.completedOnboarding;
         session.user.isOnline = !!token.isOnline;
+        session.user.workspaceId =
+          typeof token.workspaceId === "string" ? token.workspaceId : null;
       }
 
       const user = await db.user.findUnique({
         where: { id: token.id as string },
+        include: { subscriptions: true },
       });
 
       if (user) {
@@ -95,6 +98,11 @@ export const authOptions: NextAuthOptions = {
         session.user.completedOnboarding = user.completedOnboarding;
         session.user.username = user.username;
         session.user.isOnline = user.isOnline;
+
+        const subscription = user.subscriptions[0];
+        if (subscription) {
+          session.user.workspaceId = subscription.workspaceId;
+        }
       }
 
       return session;
@@ -103,6 +111,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         const dbUser = await db.user.findFirst({
           where: { email: token.email },
+          include: { subscriptions: true },
         });
 
         if (!dbUser) {
@@ -116,12 +125,14 @@ export const authOptions: NextAuthOptions = {
             data: { isOnline: true },
           });
 
+          const subscription = dbUser.subscriptions[0];
           return {
             id: dbUser.id,
             username: dbUser.username,
             email: dbUser.email,
             picture: dbUser.image,
             isOnline: true,
+            workspaceId: subscription ? subscription.workspaceId : null,
           };
         }
 

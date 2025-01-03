@@ -34,6 +34,61 @@ model User {
   AdvertMessage AdvertMessage[]
 }
 
+model House {
+  id        String      @id @default(cuid())
+  street    String
+  houseNumber String
+  entrances Entrance[]
+
+  @@unique([street, houseNumber])
+}
+
+model Entrance {
+  id          String       @id @default(cuid())
+  houseId     String
+  entranceNumber String
+  house       House         @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  apartments  Apartment[]
+
+  @@unique([houseId, entranceNumber])
+}
+
+model Apartment {
+  id             String       @id @default(cuid())
+  entranceId     String
+  apartmentNumber String
+  entrance       Entrance      @relation(fields: [entranceId], references: [id], onDelete: Cascade)
+  users          User[]
+
+  @@unique([entranceId, apartmentNumber])
+}
+
+model Workspace {
+  id String @id @default(cuid())
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  creatorId String?
+  Creator User? @relation("CreatedBy", fields: [creatorId], references: [id], onDelete: Cascade)
+  subscribers Subscription[]
+  image String?
+  color CustomColors @default(BLUE)
+
+  @@index([creatorId])
+}
+
+model Subscription {
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  workspace Workspace @relation(fields: [workspaceId],references: [id], onDelete: Cascade)
+  workspaceId String
+  userRole UserPermission @default(READ_ONLY)
+
+  @@id([userId, workspaceId])
+  @@index([workspaceId])
+  @@index([userId])
+}
+
 model Check {
   id        String   @id @default(cuid())
   userId    String
@@ -119,32 +174,6 @@ enum NotifyType {
   NEW_ASSIGNMENT_MIND_MAP
 }
 
-model Workspace {
-  id String @id @default(cuid())
-  name String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  creatorId String?
-  Creator User? @relation("CreatedBy", fields: [creatorId], references: [id], onDelete: Cascade)
-  subscribers Subscription[]
-  image String?
-  color CustomColors @default(BLUE)
-
-  @@index([creatorId])
-}
-
-model Subscription {
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-  workspace Workspace @relation(fields: [workspaceId],references: [id], onDelete: Cascade)
-  workspaceId String
-  userRole UserPermission @default(READ_ONLY)
-
-  @@id([userId, workspaceId])
-  @@index([workspaceId])
-  @@index([userId])
-}
-
 enum PomodoroSoundEffect {
   ANALOG
   BIRD
@@ -181,33 +210,3 @@ enum CustomColors {
   INDIGO
   FUCHSIA
 }
-
-model House {
-  id        String      @id @default(cuid())
-  street    String
-  houseNumber String
-  entrances Entrance[]
-
-  @@unique([street, houseNumber])
-}
-
-model Entrance {
-  id          String       @id @default(cuid())
-  houseId     String
-  entranceNumber String
-  house       House         @relation(fields: [houseId], references: [id], onDelete: Cascade)
-  apartments  Apartment[]
-
-  @@unique([houseId, entranceNumber])
-}
-
-model Apartment {
-  id             String       @id @default(cuid())
-  entranceId     String
-  apartmentNumber String
-  entrance       Entrance      @relation(fields: [entranceId], references: [id], onDelete: Cascade)
-  users          User[]
-
-  @@unique([entranceId, apartmentNumber])
-}
-

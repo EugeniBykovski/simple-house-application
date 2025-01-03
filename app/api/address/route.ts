@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
 
 export async function POST(req: Request) {
@@ -18,21 +18,19 @@ export async function POST(req: Request) {
       contractCode,
     } = await req.json();
 
-    const house = await prisma.house.upsert({
+    const house = await db.house.upsert({
       where: { street_houseNumber: { street, houseNumber } },
       update: {},
       create: { street, houseNumber },
     });
 
-    const entrance = await prisma.entrance.upsert({
-      where: {
-        houseId_entranceNumber: { houseId: house.id, entranceNumber },
-      },
+    const entrance = await db.entrance.upsert({
+      where: { houseId_entranceNumber: { houseId: house.id, entranceNumber } },
       update: {},
       create: { houseId: house.id, entranceNumber },
     });
 
-    const apartment = await prisma.apartment.upsert({
+    const apartment = await db.apartment.upsert({
       where: {
         entranceId_apartmentNumber: {
           entranceId: entrance.id,
@@ -43,7 +41,7 @@ export async function POST(req: Request) {
       create: { entranceId: entrance.id, apartmentNumber },
     });
 
-    await prisma.user.update({
+    await db.user.update({
       where: { id: session.user.id },
       data: {
         apartmentId: apartment.id,

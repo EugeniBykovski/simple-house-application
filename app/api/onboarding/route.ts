@@ -7,10 +7,7 @@ export async function POST(request: Request) {
   const session = await getAuthSession();
 
   if (!session?.user) {
-    return new Response("Unauthorized", {
-      status: 401,
-      statusText: "Unauthorized User",
-    });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const body = await request.json();
@@ -26,93 +23,179 @@ export async function POST(request: Request) {
   const { address, workspaceName, name, surname, workspaceImage } = result.data;
 
   try {
-    const user = await db.user.findUnique({
-      where: { id: session.user.id },
-    });
+    const user = await db.user.findUnique({ where: { id: session.user.id } });
 
     if (!user) {
-      return new Response("User not found", { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Handle address creation
-    const house = await db.house.upsert({
+    const existingHouse = await db.house.findUnique({
       where: {
         street_houseNumber: {
           street: address.street,
           houseNumber: address.houseNumber,
         },
       },
-      update: {},
-      create: { street: address.street, houseNumber: address.houseNumber },
+      include: {
+        entrances: {
+          where: { entranceNumber: address.entranceNumber },
+          include: {
+            apartments: {
+              include: { users: true },
+            },
+          },
+        },
+      },
     });
 
-    const entrance = await db.entrance.upsert({
-      where: {
-        houseId_entranceNumber: {
+    let workspace;
+
+    if (!existingHouse) {
+      const house = await db.house.create({
+        data: {
+          street: address.street,
+          houseNumber: address.houseNumber,
+        },
+      });
+
+      const entrance = await db.entrance.create({
+        data: {
           houseId: house.id,
           entranceNumber: address.entranceNumber,
         },
-      },
-      update: {},
-      create: { houseId: house.id, entranceNumber: address.entranceNumber },
-    });
+      });
 
-    const apartment = await db.apartment.upsert({
-      where: {
-        entranceId_apartmentNumber: {
+      const apartment = await db.apartment.create({
+        data: {
           entranceId: entrance.id,
           apartmentNumber: address.apartmentNumber,
         },
-      },
-      update: {},
-      create: {
-        entranceId: entrance.id,
-        apartmentNumber: address.apartmentNumber,
-      },
-    });
+      });
 
-    // Update user data
-    await db.user.update({
-      where: { id: session.user.id },
-      data: {
-        name,
-        surname,
-        completedOnboarding: true,
-        apartmentId: apartment.id,
-        contractCode: address.contractCode,
-      },
-    });
+      workspace = await db.workspace.create({
+        data: {
+          creatorId: user.id,
+          name: workspaceName,
+          image: workspaceImage,
+        },
+      });
 
-    // Create workspace
-    const workspace = await db.workspace.create({
-      data: {
-        creatorId: user.id,
-        name: workspaceName,
-        image: workspaceImage,
-      },
-    });
+      await db.subscription.create({
+        data: {
+          userId: user.id,
+          workspaceId: workspace.id,
+          userRole: "ADMIN",
+        },
+      });
 
-    // Create subscription for the workspace
-    await db.subscription.create({
-      data: {
-        userId: user.id,
-        workspaceId: workspace.id,
-        userRole: "OWNER",
-      },
-    });
+      await db.user.update({
+        where: { id: session.user.id },
+        data: {
+          name,
+          surname,
+          completedOnboarding: true,
+          apartmentId: apartment.id,
+          contractCode: address.contractCode,
+        },
+      });
+    } else {
+      const entrance = existingHouse.entrances.find(
+        (entr) => entr.entranceNumber === address.entranceNumber
+      );
 
-    // Create default Pomodoro settings for the user
-    await db.pomodoroSettings.create({
-      data: {
-        userId: user.id,
-      },
-    });
+      if (!entrance) {
+        return NextResponse.json(
+          { error: "Entrance not found" },
+          { status: 400 }
+        );
+      }
 
-    return NextResponse.json(
-      { message: "Onboarding complete" },
-      { status: 200 }
-    );
+      const apartment = await db.apartment.upsert({
+        where: {
+          entranceId_apartmentNumber: {
+            entranceId: entrance.id,
+            apartmentNumber: address.apartmentNumber,
+          },
+        },
+        update: {},
+        create: {
+          entranceId: entrance.id,
+          apartmentNumber: address.apartmentNumber,
+        },
+      });
+
+      const firstUser = entrance.apartments[0]?.users[0];
+
+      if (!firstUser) {
+        workspace = await db.workspace.create({
+          data: {
+            creatorId: user.id,
+            name: workspaceName,
+            image: workspaceImage,
+          },
+        });
+
+        await db.subscription.create({
+          data: {
+            userId: user.id,
+            workspaceId: workspace.id,
+            userRole: "ADMIN",
+          },
+        });
+      } else {
+        workspace = await db.workspace.findFirst({
+          where: {
+            creatorId: firstUser.id,
+          },
+        });
+
+        if (!workspace) {
+          workspace = await db.workspace.create({
+            data: {
+              creatorId: firstUser.id,
+              name: workspaceName,
+              image: workspaceImage,
+            },
+          });
+        }
+
+        await db.subscription.upsert({
+          where: {
+            userId_workspaceId: {
+              userId: user.id,
+              workspaceId: workspace.id,
+            },
+          },
+          update: {},
+          create: {
+            userId: user.id,
+            workspaceId: workspace.id,
+            userRole: "READ_ONLY",
+          },
+        });
+      }
+
+      await db.user.update({
+        where: { id: session.user.id },
+        data: {
+          name,
+          surname,
+          completedOnboarding: true,
+          apartmentId: apartment.id,
+          contractCode: address.contractCode,
+        },
+      });
+    }
+
+    return NextResponse.json({
+      message: "Onboarding complete",
+      workspaceId: workspace.id,
+    });
   } catch (err) {
-    return NextResponse.json("ERRORS.DB_ERROR", { status: 405 });
+    console.error("Error:", err);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
