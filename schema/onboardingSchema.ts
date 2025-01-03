@@ -1,18 +1,16 @@
 import { z } from "zod";
+import { addressSchema } from "@/schema/addressSchema";
 
 export const onboardingSchema = z.object({
   name: z.string().optional().nullable(),
   surname: z.string().optional().nullable(),
-  useCase: z
-    .string()
-    .refine(
-      (string) =>
-        string === "WORK" || string === "STUDY" || string === "PERSONAL_USE"
-    ),
+  address: addressSchema,
   workspaceName: z
     .string()
-    .min(4)
-    .refine((username) => /^[a-zA-Z0-9]+$/.test(username)),
+    .min(4, { message: "Workspace name must be at least 4 characters long" })
+    .refine((name) => /^[a-zA-Z0-9]+$/.test(name), {
+      message: "Workspace name must contain only letters and numbers",
+    }),
   workspaceImage: z.string().optional().nullable(),
 });
 

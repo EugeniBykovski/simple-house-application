@@ -1,18 +1,18 @@
-import { UseCase } from "@prisma/client";
+import { AddressFormValues } from "@/schema/addressSchema";
 
 export enum ActionType {
   CHANGE_SITE = "CHANGE_SITE",
   NAME = "NAME",
   SURNAME = "SURNAME",
   PROFILEIMAGE = "PROFILEIMAGE",
-  USECASE = "USECASE",
+  ADDRESS = "ADDRESS",
   WORKSPACE_NAME = "WORKSPACE_NAME",
   WORKSPACE_IMAGE = "WORKSPACE_IMAGE",
 }
 
 export interface Action {
   type: ActionType;
-  payload: string | number | UseCase | undefined | null;
+  payload: string | number | AddressFormValues | undefined | null;
 }
 
 export interface OnboardingFormReducer {
@@ -20,7 +20,7 @@ export interface OnboardingFormReducer {
   name?: string | null;
   surname?: string | null;
   profileImage?: string | null;
-  useCase: UseCase | null;
+  address: AddressFormValues | null;
   workspaceName: string | null;
   workspaceImage?: string | null;
 }

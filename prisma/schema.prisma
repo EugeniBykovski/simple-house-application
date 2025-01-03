@@ -25,8 +25,10 @@ model User {
   sessions      Session[]
   createdWorkspaces Workspace[] @relation("CreatedBy")
   subscriptions Subscription[]
-  useCase UseCase?
   isOnline      Boolean         @default(false)
+  apartmentId   String?   
+  apartment     Apartment? @relation(fields: [apartmentId], references: [id])
+  contractCode  String?
 
   PomodoroSettings PomodoroSettings[]
   AdvertMessage AdvertMessage[]
@@ -107,12 +109,6 @@ enum UserPermission {
   OWNER
 }
 
-enum UseCase {
-  WORK
-  STUDY
-  PERSONAL_USE
-}
-
 enum NotifyType {
   NEW_USER_IN_WORKSPACE
   USER_LEFT_WORKSPACE
@@ -185,3 +181,33 @@ enum CustomColors {
   INDIGO
   FUCHSIA
 }
+
+model House {
+  id        String      @id @default(cuid())
+  street    String
+  houseNumber String
+  entrances Entrance[]
+
+  @@unique([street, houseNumber])
+}
+
+model Entrance {
+  id          String       @id @default(cuid())
+  houseId     String
+  entranceNumber String
+  house       House         @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  apartments  Apartment[]
+
+  @@unique([houseId, entranceNumber])
+}
+
+model Apartment {
+  id             String       @id @default(cuid())
+  entranceId     String
+  apartmentNumber String
+  entrance       Entrance      @relation(fields: [entranceId], references: [id], onDelete: Cascade)
+  users          User[]
+
+  @@unique([entranceId, apartmentNumber])
+}
+

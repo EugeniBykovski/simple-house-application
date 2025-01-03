@@ -1,12 +1,12 @@
 "use client";
 
+import { AddressFormValues } from "@/schema/addressSchema";
 import {
   Action,
   ActionType,
   OnboardingFormContext,
   OnboardingFormReducer,
 } from "@/types/onBoardingContext";
-import { UseCase } from "@prisma/client";
 import { Session } from "next-auth";
 import { createContext, useContext, useReducer } from "react";
 
@@ -21,26 +21,23 @@ function onBoardingFormReducer(state: OnboardingFormReducer, action: Action) {
     case ActionType.CHANGE_SITE: {
       return {
         ...state,
-        currentStep: payload as 1 | 2 | 3,
+        currentStep: payload as 1 | 2 | 3 | 4,
       };
     }
-
     case ActionType.NAME:
       return {
         ...state,
         name: payload as string,
       };
-
     case ActionType.SURNAME:
       return {
         ...state,
         surname: payload as string,
       };
-
-    case ActionType.USECASE:
+    case ActionType.ADDRESS:
       return {
         ...state,
-        useCase: payload as UseCase,
+        address: payload as AddressFormValues,
       };
     case ActionType.PROFILEIMAGE:
       return {
@@ -74,7 +71,7 @@ const initialFormState: OnboardingFormReducer = {
   name: null,
   surname: null,
   profileImage: null,
-  useCase: null,
+  address: null,
   workspaceName: "",
   workspaceImage: null,
 };

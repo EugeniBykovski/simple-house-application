@@ -1,13 +1,10 @@
 "use client";
 
 import { useOnboardingForm } from "@/context/OnboardingForm";
-import { useTranslations } from "next-intl";
 import { UserAvatar } from "@/components/ui/user-avatar";
 
 export const SummarySection = () => {
-  const t = useTranslations("onboarding_form");
-
-  const { name, surname, profileImage, useCase, currentStep } =
+  const { name, surname, profileImage, address, currentStep } =
     useOnboardingForm();
 
   return (
@@ -23,12 +20,11 @@ export const SummarySection = () => {
             {name && <p>{name}</p>}
             {surname && <p>{surname}</p>}
           </div>
-          {!useCase && <span className="bg-muted rounded-md w-24 h-8"></span>}
-          {useCase && (
+          {!address && <span className="bg-muted rounded-md w-24 h-8"></span>}
+          {address && (
             <p>
-              {useCase === "WORK" && t("SECOND_STEP.WORK")}
-              {useCase === "STUDY" && t("SECOND_STEP.STUDY")}
-              {useCase === "PERSONAL_USE" && t("SECOND_STEP.PERSONAL")}
+              {address.street}, {address.houseNumber}, {address.entranceNumber},{" "}
+              {address.apartmentNumber}
             </p>
           )}
         </div>

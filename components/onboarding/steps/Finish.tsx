@@ -11,14 +11,19 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+interface ErrorResponse {
+  error: string;
+}
+
 export const Finish = () => {
   const t = useTranslations("onboarding_form");
   const m = useTranslations("messages");
 
-  const { workspaceName, workspaceImage, surname, useCase, name } =
+  const { workspaceName, workspaceImage, surname, address, name } =
     useOnboardingForm();
   const { toast } = useToast();
   const { update } = useSession();
+
   const router = useRouter();
   const [isDone, setIsDone] = useState(false);
 
@@ -27,36 +32,37 @@ export const Finish = () => {
       const { data } = await axios.post("/api/onboarding", {
         name,
         surname,
-        useCase,
+        address,
         workspaceImage,
         workspaceName,
       });
       return data;
     },
-    onError: (err: AxiosError) => {
-      const error = err?.response?.data ? err.response.data : "ERRORS_DEFAULT";
-
+    onError: (err: AxiosError<ErrorResponse>) => {
+      const errorMessage =
+        err.response?.data?.error || "An unknown error occurred";
       toast({
-        title: m(error),
+        title: "Error",
+        description: errorMessage,
         variant: "destructive",
       });
     },
     onSuccess: async () => {
       setIsDone(true);
       toast({
-        title: m("SUCCESS.ONBOARDING_COMPLETE"),
+        title: "Success",
+        description: "Onboarding complete!",
       });
       await update();
       router.push("/dashboard");
       router.refresh();
     },
-    mutationKey: ["completeOnboarding"],
   });
 
   return (
     <>
       <div className="flex flex-col justify-center items-center gap-4 w-full mt-10 text-center">
-        <h2 className="font-bold text-4xl md:text-5xl  max-w-xs">
+        <h2 className="font-bold text-4xl md:text-5xl max-w-xs">
           {t("FINISH.TITLE")}
         </h2>
       </div>
