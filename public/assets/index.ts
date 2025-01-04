@@ -5,6 +5,17 @@ import celestialLogo from "@/public/assets/icons/logos-slider/logo-celestial.png
 import pulseLogo from "@/public/assets/icons/logos-slider/logo-pulse.png";
 import apexLogo from "@/public/assets/icons/logos-slider/logo-apex.png";
 
-export { acmeLogo, quantumLogo, echoLogo, celestialLogo, pulseLogo, apexLogo };
+import flat from "@/public/assets/flat-apart.png";
+
+export {
+  acmeLogo,
+  quantumLogo,
+  echoLogo,
+  celestialLogo,
+  pulseLogo,
+  apexLogo,
+  flat,
+};
 
 export { LogoIcon } from "@/public/assets/icons/logos/logo-icon";
+export { LogoIconGreen } from "@/public/assets/icons/logos/logo-icon-green";

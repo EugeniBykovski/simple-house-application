@@ -2,7 +2,7 @@ import Welcoming from "@/components/common/Welcoming/Welcoming";
 import { DashboardHeader } from "@/components/header/DashboardHeader/DashboardHeader";
 import { checkIfUserCompletedOnboarding } from "@/lib/checkIfUserCompletedOnboarding";
 import { SwitchAccountType } from "./settings/billing/switch-account-type/SwitchAccountType";
-import { HomeUsersCage } from "@/components/ui/home-users-cage";
+import { HomeUsersCage } from "@/components/ui/home-users-cage/home-users-cage";
 
 const Dashboard = async () => {
   const session = await checkIfUserCompletedOnboarding("/dashboard");
