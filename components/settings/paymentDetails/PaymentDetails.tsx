@@ -33,7 +33,7 @@ import { columns } from "./columns";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export const PaymentDetails = () => {
+export const PaymentDetails = ({ session }: { session: any }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -43,18 +43,25 @@ export const PaymentDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!session?.user?.id) {
+        console.error("User ID is not available in the session.");
+        return;
+      }
+
       try {
-        const response = await axios.get("/api/checks");
+        const response = await axios.get("/api/checks", {
+          headers: { "user-id": session.user.id },
+        });
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching checks:", error);
+        console.error("Error fetching payment details:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [session?.user?.id]);
 
   const table = useReactTable({
     data,
