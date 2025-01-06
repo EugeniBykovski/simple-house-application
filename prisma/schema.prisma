@@ -57,6 +57,7 @@ model Apartment {
   id             String       @id @default(cuid())
   entranceId     String
   apartmentNumber String
+  floor          String? 
   entrance       Entrance      @relation(fields: [entranceId], references: [id], onDelete: Cascade)
   users          User[]
 

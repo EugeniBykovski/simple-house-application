@@ -6,6 +6,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { useOnboardingForm } from "@/context/OnboardingForm";
 import { AddressFormValues, addressSchema } from "@/schema/addressSchema";
 import { ActionType } from "@/types/onBoardingContext";
@@ -39,6 +40,7 @@ export const SecondStep = () => {
             street: data.street,
             houseNumber: data.houseNumber,
             entranceNumber: data.entranceNumber,
+            floor: data.floor,
             apartmentNumber: data.apartmentNumber,
             contractCode: data.contractCode,
           },
@@ -68,7 +70,7 @@ export const SecondStep = () => {
               <FormItem>
                 <FormLabel>Street</FormLabel>
                 <FormControl>
-                  <input {...field} className="input" />
+                  <Input {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -80,7 +82,7 @@ export const SecondStep = () => {
               <FormItem>
                 <FormLabel>House Number</FormLabel>
                 <FormControl>
-                  <input {...field} className="input" />
+                  <Input {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -92,7 +94,19 @@ export const SecondStep = () => {
               <FormItem>
                 <FormLabel>Entrance Number</FormLabel>
                 <FormControl>
-                  <input {...field} className="input" />
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="floor"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Floor (Optional)</FormLabel>
+                <FormControl>
+                  <Input {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -104,7 +118,7 @@ export const SecondStep = () => {
               <FormItem>
                 <FormLabel>Apartment Number</FormLabel>
                 <FormControl>
-                  <input {...field} className="input" />
+                  <Input {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -116,7 +130,7 @@ export const SecondStep = () => {
               <FormItem>
                 <FormLabel>Contract Code</FormLabel>
                 <FormControl>
-                  <input {...field} className="input" />
+                  <Input {...field} />
                 </FormControl>
               </FormItem>
             )}

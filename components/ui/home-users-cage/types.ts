@@ -14,6 +14,7 @@ export interface User {
 
 export interface Apartment {
   apartmentNumber: number;
+  floor: string | null;
   users: User[];
 }
 

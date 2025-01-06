@@ -117,10 +117,11 @@ export async function POST(request: Request) {
             apartmentNumber: address.apartmentNumber,
           },
         },
-        update: {},
+        update: { floor: address.floor },
         create: {
           entranceId: entrance.id,
           apartmentNumber: address.apartmentNumber,
+          floor: address.floor,
         },
       });
 

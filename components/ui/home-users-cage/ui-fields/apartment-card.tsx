@@ -1,4 +1,4 @@
-import { flat, LogoIconGreen } from "@/public/assets";
+import { flat } from "@/public/assets";
 import Image from "next/image";
 import { FC } from "react";
 

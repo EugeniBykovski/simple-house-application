@@ -14,6 +14,7 @@ export async function POST(req: Request) {
       street,
       houseNumber,
       entranceNumber,
+      floor,
       apartmentNumber,
       contractCode,
     } = await req.json();
@@ -37,8 +38,8 @@ export async function POST(req: Request) {
           apartmentNumber,
         },
       },
-      update: {},
-      create: { entranceId: entrance.id, apartmentNumber },
+      update: { floor: floor ?? 1 },
+      create: { entranceId: entrance.id, apartmentNumber, floor: floor ?? 1 },
     });
 
     await db.user.update({
