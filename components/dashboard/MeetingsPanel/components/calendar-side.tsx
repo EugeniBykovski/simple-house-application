@@ -16,10 +16,15 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CalendarSidebar from "./sidebar/calendar-sidebar";
 import CalendarMonth from "./calendar-month";
+import { useViewStore } from "@/store/store";
+import CalendarDay from "./calendar-day";
+import CalendarWeek from "./calendar-week";
 
 const CalendarSide: FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
+
+  const { selectedView, setView } = useViewStore();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -52,7 +57,7 @@ const CalendarSide: FC = () => {
           <h3 className="text-sm text-green-500">January 25 2025</h3>
         </div>
         <div className="flex items-center gap-2">
-          <Select>
+          <Select onValueChange={(view) => setView(view)}>
             <SelectTrigger className="w-24 focus-visible:outline-none">
               <SelectValue placeholder="Month" />
             </SelectTrigger>
@@ -82,8 +87,10 @@ const CalendarSide: FC = () => {
 
       <div className="flex justify-between items-start gap-2 h-full w-full">
         <CalendarSidebar />
-        <div className="flex justify-center items-start px-4 w-[100%] h-full rounded-md">
-          <CalendarMonth />
+        <div className="flex justify-center items-start px-4 w-[100%] h-full rounded-md flex-col">
+          {selectedView === "month" && <CalendarMonth />}
+          {selectedView === "week" && <CalendarWeek />}
+          {selectedView === "day" && <CalendarDay />}
         </div>
       </div>
     </div>
