@@ -74,3 +74,9 @@ export const advertisements = [
     hourClose: "23",
   },
 ];
+
+export const selectOptions = [
+  { label: "Month", value: "month" },
+  { label: "Week", value: "week" },
+  { label: "Day", value: "day" },
+];

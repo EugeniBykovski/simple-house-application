@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SettingsWorkspace } from "./SettingsWorkspace";
+import { AnimatePresence, motion } from "framer-motion";
 
 const settingsFields = [
   {
@@ -53,6 +54,18 @@ interface Props {
 export const Settings = ({ userAdminWorkspaces }: Props) => {
   const t = useTranslations("sidebar");
 
+  const linkVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.3,
+      },
+    }),
+  };
+
   return (
     <div className="flex flex-col gap-6 w-full">
       <div>
@@ -60,18 +73,28 @@ export const Settings = ({ userAdminWorkspaces }: Props) => {
           {t("SETTINGS.GENERAL")}
         </p>
         <div className="flex flex-col gap-2 w-full mt-2">
-          {settingsFields.map((settingField, i) => (
-            <ActiveLink
-              key={i}
-              href={settingField.href}
-              variant={"ghost"}
-              size={"sm"}
-              className="flex justify-start w-full items-center gap-2"
-            >
-              {settingField.icon}
-              {t(settingField.title)}
-            </ActiveLink>
-          ))}
+          <AnimatePresence mode="wait">
+            {settingsFields.map((settingField, i) => (
+              <motion.div
+                key={i}
+                custom={i}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                variants={linkVariants}
+              >
+                <ActiveLink
+                  href={settingField.href}
+                  variant={"ghost"}
+                  size={"sm"}
+                  className="flex justify-start w-full items-center gap-2"
+                >
+                  {settingField.icon}
+                  {t(settingField.title)}
+                </ActiveLink>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -80,13 +103,23 @@ export const Settings = ({ userAdminWorkspaces }: Props) => {
           {t("SETTINGS.WORKSPACE")}
         </p>
         <div className="flex flex-col gap-2 w-full mt-2">
-          {userAdminWorkspaces?.map((workspace) => (
-            <SettingsWorkspace
-              key={workspace.id}
-              href="/dashboard/settings/workspace"
-              workspace={workspace}
-            />
-          ))}
+          <AnimatePresence mode="wait">
+            {userAdminWorkspaces?.map((workspace, i) => (
+              <motion.div
+                key={workspace.id}
+                custom={i}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                variants={linkVariants}
+              >
+                <SettingsWorkspace
+                  href="/dashboard/settings/workspace"
+                  workspace={workspace}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </div>
     </div>

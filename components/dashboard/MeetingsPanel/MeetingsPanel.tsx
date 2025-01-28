@@ -5,6 +5,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ArrowUpToLine } from "lucide-react";
 import { useMeetingsContext } from "@/context/MeetingsContext";
 import { Button } from "@/components/ui/button";
+import CalendarTitle from "./components/calendar-titles";
+import CalendarSide from "./components/calendar-side";
 
 const MeetingsPanel: FC = () => {
   const { isOpen, openSheet, closeSheet } = useMeetingsContext();
@@ -24,11 +26,15 @@ const MeetingsPanel: FC = () => {
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-[75vw] h-full flex justify-center items-start sm:max-w-[75vw]"
+        className="w-[90vw] h-full flex justify-center items-start sm:max-w-[85vw] p-2"
       >
-        <div className="p-4">
-          <h2 className="text-lg font-semibold">Meetings Block</h2>
-          <p className="text-gray-600">Your meetings and events go here.</p>
+        <div className="w-full flex flex-col items-center h-full">
+          <CalendarTitle />
+          <div className="rounded-md p-4 mt-2 w-full h-full">
+            <div className="h-full">
+              <CalendarSide />
+            </div>
+          </div>
         </div>
       </SheetContent>
     </Sheet>

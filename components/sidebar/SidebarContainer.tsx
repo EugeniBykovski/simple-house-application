@@ -22,8 +22,8 @@ export const SidebarContainer = ({
   return (
     <>
       <aside
-        className={`z-50 top-0 h-full left-0 bg-background border-r lg:translate-x-0 transition-all duration-300 sm:hidden lg:flex shadow-lg ${
-          isOpen ? "translate-x-0 shadow-sm" : "translate-x-[-100%]"
+        className={`z-50 top-0 h-full left-0 border-r lg:translate-x-0 transition-all duration-300 sm:hidden lg:flex shadow-lg ${
+          isOpen ? "translate-x-0 shadow-sm" : "-translate-x-full"
         }`}
       >
         <ShortcutSidebar

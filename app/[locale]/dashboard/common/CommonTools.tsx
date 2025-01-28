@@ -6,15 +6,13 @@ import MeetingsPanel from "@/components/dashboard/MeetingsPanel/MeetingsPanel";
 import { HelperDesk } from "@/components/helperdesk/HelperDesk";
 import { AdvertsTextSlider } from "@/components/ui/adverts-text-slider";
 
-export const CommonTools: FC = () => {
-  return (
-    <>
-      <div className="flex flex-col justify-center relative">
-        <AdvertsTextSlider className="absolute bottom-10 z-0" />
-        <DraggablePanel />
-      </div>
-      <MeetingsPanel />
-      <HelperDesk />
-    </>
-  );
-};
+export const CommonTools: FC = () => (
+  <>
+    <div className="flex flex-col justify-center relative">
+      <AdvertsTextSlider className="absolute bottom-10 z-0" />
+      <DraggablePanel />
+    </div>
+    <MeetingsPanel />
+    <HelperDesk />
+  </>
+);
