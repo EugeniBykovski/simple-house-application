@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { getAuthSession } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
@@ -77,7 +77,6 @@ export async function getAllUsersWorkspaceEvents() {
       },
     });
 
-    console.log("Fetched users in workspace:", users);
     return users;
   } catch (error) {
     console.error("Failed to fetch users:", error);

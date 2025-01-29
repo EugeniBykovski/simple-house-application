@@ -43,8 +43,8 @@ export const authOptions: NextAuthOptions = {
           placeholder: "Password",
         },
       },
-      async authorize(credentials, req) {
-        if (!credentials?.email || !credentials.password) {
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
           throw new Error("Please enter email and password.");
         }
 
@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
         if (!user || !user?.hashedPassword) {
           throw new Error("User was not found, Please enter valid email");
         }
+
         const passwordMatch = await bcrypt.compare(
           credentials.password,
           user.hashedPassword

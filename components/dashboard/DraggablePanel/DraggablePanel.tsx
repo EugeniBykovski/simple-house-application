@@ -3,6 +3,7 @@
 import { FC } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ArrowUpToLine } from "lucide-react";
+import Chats from "@/components/chats/chats";
 
 export const DraggablePanel: FC = () => {
   return (
@@ -14,7 +15,7 @@ export const DraggablePanel: FC = () => {
         </div>
       </SheetTrigger>
       <SheetContent side={"bottom"} className="h-[75%] flex justify-center">
-        Chats Block
+        <Chats />
       </SheetContent>
     </Sheet>
   );
