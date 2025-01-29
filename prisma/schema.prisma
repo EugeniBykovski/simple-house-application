@@ -32,6 +32,8 @@ model User {
 
   PomodoroSettings PomodoroSettings[]
   AdvertMessage AdvertMessage[]
+
+  calendarEvent CalendarEvent[]
 }
 
 model House {
@@ -62,6 +64,7 @@ model Apartment {
   users          User[]
 
   @@unique([entranceId, apartmentNumber])
+  calendarEvent CalendarEvent[]
 }
 
 model Workspace {
@@ -210,4 +213,17 @@ enum CustomColors {
   EMERALD
   INDIGO
   FUCHSIA
+}
+
+model CalendarEvent {
+  id          String   @id @default(cuid())
+  date        DateTime
+  title       String
+  description String
+  userId      String
+  apartmentId String?
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  apartment   Apartment? @relation(fields: [apartmentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

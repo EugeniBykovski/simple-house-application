@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useDateStore, useEventStore } from "@/store/store";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { EventRenderer } from "./calendar-renderer";
+import { EventRenderer } from "../calendar-renderer";
 
 const CalendarWeek = () => {
   const [currentTime, setCurrentTime] = useState(dayjs());

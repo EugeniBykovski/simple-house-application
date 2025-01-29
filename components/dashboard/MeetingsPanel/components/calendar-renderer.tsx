@@ -21,20 +21,40 @@ export const EventRenderer = ({ date, view, events }: EventRendererProps) => {
     }
   });
 
+  if (view === "month" && filteredEvents.length > 3) {
+    return (
+      <div className="w-full flex flex-col gap-1">
+        {filteredEvents.slice(0, 3).map((event) => (
+          <div
+            key={event.id}
+            onClick={(e) => {
+              e.stopPropagation();
+              openEventSummary(event);
+            }}
+            className="line-clamp-1 w-full cursor-pointer rounded-sm bg-green-700 p-1 text-sm text-white"
+          >
+            {event.title}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <>
-      {filteredEvents.map((event) => (
+    <div className="w-full flex gap-1">
+      {filteredEvents.map((event, index) => (
         <div
           key={event.id}
           onClick={(e) => {
             e.stopPropagation();
             openEventSummary(event);
           }}
-          className="line-clamp-1 w-[90%] cursor-pointer rounded-sm bg-green-700 p-1 text-sm text-white"
+          className="line-clamp-1 flex-1 cursor-pointer rounded-sm bg-green-700 p-1 text-sm text-white"
+          style={{ width: `${100 / filteredEvents.length}%` }}
         >
           {event.title}
         </div>
       ))}
-    </>
+    </div>
   );
 };

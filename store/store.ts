@@ -3,9 +3,11 @@ import dayjs, { Dayjs } from "dayjs";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import {
+  CalendarEventType,
   DateStoreType,
   EventStore,
   ToggleSideBarType,
+  UserType,
   ViewStoreType,
 } from "./types";
 
@@ -54,6 +56,18 @@ export const useEventStore = create<EventStore>((set) => ({
     set({ isEventSummaryOpen: true, selectedEvent: event }),
   closeEventSummary: () =>
     set({ isEventSummaryOpen: false, selectedEvent: null }),
+  addUserToCall: (user: UserType) =>
+    set((state) => ({
+      events: [
+        ...state.events,
+        {
+          id: user.id,
+          title: user.name,
+          date: dayjs(),
+          description: "Call with " + user.name,
+        },
+      ],
+    })),
 }));
 
 export const useToggleSideBarStore = create<ToggleSideBarType>()(

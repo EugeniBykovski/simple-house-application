@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { useDateStore, useEventStore } from "@/store/store";
 import dayjs from "dayjs";
-import { EventRenderer } from "./calendar-renderer";
+import { EventRenderer } from "../calendar-renderer";
 
 const CalendarMonthLayout = ({
   day,

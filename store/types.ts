@@ -20,6 +20,13 @@ export type CalendarEventType = {
   description: string;
 };
 
+export type UserType = {
+  id: string;
+  username: string;
+  email: string | null;
+  image?: string | null;
+};
+
 export type EventStore = {
   events: CalendarEventType[];
   isPopoverOpen: boolean;
@@ -30,6 +37,7 @@ export type EventStore = {
   closePopover: () => void;
   openEventSummary: (event: CalendarEventType) => void;
   closeEventSummary: () => void;
+  addUserToCall: (user: UserType) => void;
 };
 
 export interface ToggleSideBarType {
