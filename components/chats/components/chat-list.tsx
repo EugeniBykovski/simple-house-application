@@ -30,6 +30,9 @@ const ChatList: FC<ChatListProps> = ({
   const [chatConversations, setChatConversations] =
     useState<ExtendedConversation[]>(conversations);
   const { conversationId } = useConversation();
+  const selectedConversation = chatConversations.find(
+    (conv) => conv.id === conversationId
+  );
 
   useEffect(() => {
     if (!conversationId) return;
@@ -44,15 +47,13 @@ const ChatList: FC<ChatListProps> = ({
 
   return (
     <div className="w-full flex flex-col items-start p-4">
-      {chatConversations.length > 0 ? (
-        chatConversations.map((item) => (
-          <ConversationBox
-            key={item.id}
-            conversationId={item.id}
-            conversation={conversation}
-            messages={messages}
-          />
-        ))
+      {selectedConversation ? (
+        <ConversationBox
+          key={selectedConversation.id}
+          conversationId={selectedConversation.id}
+          conversation={selectedConversation}
+          messages={messages}
+        />
       ) : (
         <p>No messages yet</p>
       )}

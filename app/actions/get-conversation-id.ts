@@ -25,16 +25,31 @@ const getConversationById = async (
             user: true,
           },
         },
+        messages: {
+          include: {
+            sender: true,
+            seenBy: {
+              include: {
+                user: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
       },
     });
 
-    if (!conversation) return null;
+    if (!conversation) {
+      return null;
+    }
 
     return {
       ...conversation,
       participants: conversation.participants.map((p) => p.user),
     };
-  } catch (error: any) {
+  } catch (error) {
     return null;
   }
 };

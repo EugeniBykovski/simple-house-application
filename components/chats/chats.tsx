@@ -48,9 +48,9 @@ const Chats: FC<ChatsProps> = ({
           />
           <div className="bg-neutral-50 w-full px-2 py-6 flex flex-col justify-start rounded-lg shadow-md">
             <ConversationHeader
+              currentUser={currentUser}
               conversation={conversation ?? ({} as Conversation)}
             />
-
             {activeChat ? (
               <ChatList
                 conversations={conversations}

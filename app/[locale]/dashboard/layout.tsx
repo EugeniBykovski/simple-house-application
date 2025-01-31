@@ -21,19 +21,21 @@ interface ExtendedConversation extends Conversation {
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  conversationId: string;
 }
 
-const DashboardLayout = async ({
-  children,
-  conversationId,
-}: DashboardLayoutProps) => {
+const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
   const currentUser = await getCurrentUser();
   const users = await getUsers();
   const conversations: ExtendedConversation[] = await getConversations();
 
-  const conversation = await getConversationById(conversationId);
-  const messages: Message[] = await getMessages(conversationId);
+  const conversationId = conversations.length > 0 ? conversations[0].id : null;
+
+  const conversation = conversationId
+    ? await getConversationById(conversationId)
+    : null;
+  const messages: Message[] = conversationId
+    ? await getMessages(conversationId)
+    : [];
 
   return (
     <ToggleSidebarProvider>

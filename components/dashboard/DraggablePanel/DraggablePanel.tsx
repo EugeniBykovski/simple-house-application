@@ -33,6 +33,9 @@ export const DraggablePanel: FC<DraggablePanelProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  console.log(conversation);
+  console.log(conversations);
+
   return (
     <Sheet open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <SheetTrigger

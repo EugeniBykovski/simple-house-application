@@ -31,6 +31,7 @@ const ChatsUserBox: FC<ChatsUserBoxProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const session = useSession();
+  const userEmail = session.data?.user?.email || "";
 
   const userConversation = useMemo(() => {
     return conversations.find((conv) =>
@@ -48,8 +49,6 @@ const ChatsUserBox: FC<ChatsUserBoxProps> = ({
       .pop();
   }, [userConversation]);
 
-  const userEmail = session.data?.user?.email || "";
-
   const hasSeen = useMemo(() => {
     if (!lastMessage) return false;
     return lastMessage.seen?.some((user) => user.email === userEmail) || false;
@@ -60,6 +59,11 @@ const ChatsUserBox: FC<ChatsUserBoxProps> = ({
     : lastMessage?.body || "Started a conversation";
 
   const handleClick = useCallback(() => {
+    if (userConversation) {
+      setActiveChat(userConversation.id);
+      return;
+    }
+
     setIsLoading(true);
 
     axios
@@ -68,7 +72,7 @@ const ChatsUserBox: FC<ChatsUserBoxProps> = ({
         setActiveChat(response.data.id);
       })
       .finally(() => setIsLoading(false));
-  }, [data, setActiveChat]);
+  }, [userConversation, data, setActiveChat]);
 
   return (
     <div
