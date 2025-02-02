@@ -1,53 +1,45 @@
 "use client";
 
-import { FC, useCallback, useMemo, useState } from "react";
-import { Conversation, User } from "@prisma/client";
+import { FC, useCallback, useMemo } from "react";
+import { User } from "@prisma/client";
 import { UserAvatar } from "@/components/ui/user-avatar";
-import axios from "axios";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
-
-interface ExtendedConversation extends Conversation {
-  participants: User[];
-  messages: {
-    body?: string;
-    image?: string;
-    createdAt?: string;
-    seen?: { email: string }[];
-  }[];
-}
+import { FullConversationType } from "@/types/chats";
+import { ClockAlert } from "lucide-react";
 
 interface ChatsUserBoxProps {
-  data: User;
+  conversation: FullConversationType;
   setActiveChat: (id: string) => void;
-  conversations: ExtendedConversation[];
+  currentUser: User;
 }
 
 const ChatsUserBox: FC<ChatsUserBoxProps> = ({
-  data,
   setActiveChat,
-  conversations,
+  conversation,
+  currentUser,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const session = useSession();
   const userEmail = session.data?.user?.email || "";
 
-  const userConversation = useMemo(() => {
-    return conversations.find((conv) =>
-      conv.participants.some((user) => user.id === data.id)
-    );
-  }, [conversations, data.id]);
+  const handleClick = useCallback(() => {
+    setActiveChat(conversation.id);
+  }, [conversation.id, setActiveChat]);
+
+  const otherParticipant = useMemo(() => {
+    return conversation.participants.find((user) => user.id !== currentUser.id);
+  }, [conversation.participants, currentUser]);
 
   const lastMessage = useMemo(() => {
-    if (!userConversation?.messages || userConversation.messages.length === 0) {
+    if (!conversation.messages || conversation.messages.length === 0) {
       return null;
     }
 
-    return [...userConversation.messages]
+    return [...conversation.messages]
       .filter((msg) => msg.body || msg.image)
       .pop();
-  }, [userConversation]);
+  }, [conversation.messages]);
 
   const hasSeen = useMemo(() => {
     if (!lastMessage) return false;
@@ -58,34 +50,35 @@ const ChatsUserBox: FC<ChatsUserBoxProps> = ({
     ? "Sent an image"
     : lastMessage?.body || "Started a conversation";
 
-  const handleClick = useCallback(() => {
-    if (userConversation) {
-      setActiveChat(userConversation.id);
-      return;
-    }
-
-    setIsLoading(true);
-
-    axios
-      .post("/api/conversations", { userId: data.id })
-      .then((response) => {
-        setActiveChat(response.data.id);
-      })
-      .finally(() => setIsLoading(false));
-  }, [userConversation, data, setActiveChat]);
+  const formattedDate = lastMessage?.createdAt ? (
+    format(new Date(lastMessage.createdAt), "p")
+  ) : (
+    <ClockAlert className="w-3 h-3" />
+  );
 
   return (
     <div
       onClick={handleClick}
       className="w-full relative flex items-center space-x-3 bg-white p-2 hover:bg-neutral-100 rounded-lg transition cursor-pointer"
     >
-      <UserAvatar profileImage={data.image} className="w-8 h-8" />
-      <div className="min-w-0 flex-1">
+      <UserAvatar
+        profileImage={
+          conversation.isGroup
+            ? "/default-group-avatar.png"
+            : otherParticipant?.image
+        }
+        className="w-8 h-8"
+      />
+      <div className="flex-1">
         <div className="focus:outline-none">
           <div className="flex justify-between items-start flex-col">
-            <p className="text-xs font-medium">
-              {data.name} {data.surname}
-            </p>
+            <div className="text-xs font-medium flex justify-between items-center w-full">
+              {conversation.isGroup
+                ? conversation.name
+                : otherParticipant?.name}
+
+              <span className="text-zinc-300">{formattedDate}</span>
+            </div>
             <p
               className={clsx(
                 `text-xs truncate`,

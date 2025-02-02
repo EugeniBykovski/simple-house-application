@@ -1,14 +1,9 @@
 import { db } from "@/lib/db";
-import { Message, User } from "@prisma/client";
-
-interface ExtendedMessage extends Message {
-  sender: User;
-  seenBy: { email: string }[];
-}
+import { FullMessageType } from "@/types/chats";
 
 const getMessages = async (
   conversationId: string
-): Promise<ExtendedMessage[]> => {
+): Promise<FullMessageType[]> => {
   try {
     const messages = await db.message.findMany({
       where: { conversationId },
@@ -27,9 +22,9 @@ const getMessages = async (
 
     return messages.map((message) => ({
       ...message,
-      seenBy: message.seenBy.map((seen) => ({
-        email: seen.user.email ?? "",
-      })),
+      senderId: message.senderId,
+      conversationId: message.conversationId,
+      seen: message.seenBy.map((seen) => seen.user),
     }));
   } catch (error) {
     console.error("Error fetching messages:", error);

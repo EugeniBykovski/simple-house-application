@@ -1,6 +1,7 @@
 export const availableRoutesWithTranslation = [
   "dashboard",
   "settings",
+  "chats",
   "security",
   "theme",
   "billing",

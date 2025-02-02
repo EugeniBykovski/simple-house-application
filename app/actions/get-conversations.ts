@@ -1,20 +1,9 @@
 import getCurrentUser from "./get-current-user";
 import { db } from "@/lib/db";
-import { Conversation, User } from "@prisma/client";
+import { FullConversationType } from "@/types/chats";
+import { Conversation, User, Message } from "@prisma/client";
 
-interface ExtendedConversation extends Conversation {
-  participants: User[];
-  messages: {
-    id: string;
-    body?: string;
-    image?: string;
-    createdAt?: string;
-    sender: User;
-    seen?: { email: string }[];
-  }[];
-}
-
-const getConversations = async (): Promise<ExtendedConversation[]> => {
+const getConversations = async (): Promise<FullConversationType[]> => {
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser?.id) {
@@ -59,15 +48,13 @@ const getConversations = async (): Promise<ExtendedConversation[]> => {
       participants: conversation.participants.map((p) => p.user),
       messages: conversation.messages.map((message) => ({
         id: message.id,
-        body: message.body ?? undefined,
-        image: message.image ?? undefined,
-        createdAt: message.createdAt
-          ? message.createdAt.toISOString()
-          : undefined,
+        body: message.body ?? null,
+        image: message.image ?? null,
+        createdAt: message.createdAt,
+        conversationId: message.conversationId,
+        senderId: message.senderId,
         sender: message.sender,
-        seen: message.seenBy.map((seen) => ({
-          email: seen.user.email ?? "",
-        })),
+        seen: message.seenBy.map((seen) => seen.user),
       })),
     }));
   } catch (error) {

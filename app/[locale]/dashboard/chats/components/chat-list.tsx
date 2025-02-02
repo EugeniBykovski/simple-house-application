@@ -2,34 +2,19 @@
 
 import { FC, useEffect, useState } from "react";
 import axios from "axios";
-import { Conversation, Message, User } from "@prisma/client";
 import useConversation from "@/hooks/use-conversation";
 import ConversationBox from "./conversation-box";
-
-interface ExtendedConversation extends Conversation {
-  participants: User[];
-  messages: {
-    body?: string;
-    image?: string;
-    createdAt?: string;
-    seen?: { email: string }[];
-  }[];
-}
+import { FullConversationType } from "@/types/chats";
 
 interface ChatListProps {
-  conversations: ExtendedConversation[];
-  conversation?: Conversation | null;
-  messages: Message[];
+  conversations: FullConversationType[];
 }
 
-const ChatList: FC<ChatListProps> = ({
-  conversations,
-  conversation,
-  messages,
-}) => {
+const ChatList: FC<ChatListProps> = ({ conversations }) => {
   const [chatConversations, setChatConversations] =
-    useState<ExtendedConversation[]>(conversations);
+    useState<FullConversationType[]>(conversations);
   const { conversationId } = useConversation();
+
   const selectedConversation = chatConversations.find(
     (conv) => conv.id === conversationId
   );
@@ -38,7 +23,7 @@ const ChatList: FC<ChatListProps> = ({
     if (!conversationId) return;
 
     axios
-      .get<{ conversations: ExtendedConversation[] }>(
+      .get<{ conversations: FullConversationType[] }>(
         `/api/conversations/${conversationId}`
       )
       .then((response) => setChatConversations(response.data.conversations))
@@ -52,7 +37,6 @@ const ChatList: FC<ChatListProps> = ({
           key={selectedConversation.id}
           conversationId={selectedConversation.id}
           conversation={selectedConversation}
-          messages={messages}
         />
       ) : (
         <p>No messages yet</p>

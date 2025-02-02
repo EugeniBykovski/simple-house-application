@@ -2,10 +2,11 @@
 
 import { FC } from "react";
 import { UserAvatar } from "@/components/ui/user-avatar";
-import { Conversation, User } from "@prisma/client";
+import { User } from "@prisma/client";
+import { FullConversationType } from "@/types/chats";
 
 interface ConversationHeaderProps {
-  conversation: Conversation | null;
+  conversation: FullConversationType | null;
   currentUser: User;
 }
 
@@ -21,12 +22,18 @@ const ConversationHeader: FC<ConversationHeaderProps> = ({
     );
   }
 
-  const statusMsg = conversation.isGroup ? `${conversation} members` : "Active";
+  const statusMsg = conversation.isGroup
+    ? `${conversation.participants.length} members`
+    : "Active";
+
+  const otherUser = conversation.participants.find(
+    (user) => user.id !== currentUser.id
+  );
 
   return (
     <div className="bg-white w-full flex flex-col items-start border-b-[1px] rounded-lg py-2 px-3 justify-between shadow-sm mb-4">
       <div className="flex gap-3 items-center">
-        <UserAvatar profileImage={currentUser.image} className="w-10 h-10" />
+        <UserAvatar profileImage={otherUser?.image} className="w-10 h-10" />
         <span className="font-bold text-sm text-zinc-600">
           {conversation.name ?? "Direct Chat"}
         </span>
