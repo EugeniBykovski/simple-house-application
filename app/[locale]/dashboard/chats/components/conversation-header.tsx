@@ -37,6 +37,11 @@ const ConversationHeader: FC<ConversationHeaderProps> = ({
         <span className="font-bold text-sm text-zinc-600">
           {conversation.name ?? "Direct Chat"}
         </span>
+        <div className="flex gap-x-1 text-xs">
+          (<span>{otherUser?.username}</span>
+          <span>{otherUser?.surname}</span>
+          <span>{otherUser?.email}</span>)
+        </div>
         <span className="text-xs text-green-500">{statusMsg}</span>
       </div>
     </div>

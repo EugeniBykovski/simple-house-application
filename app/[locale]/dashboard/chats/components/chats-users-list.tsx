@@ -6,7 +6,7 @@ import ChatsUserBox from "./chats-user-box";
 import { FullConversationType } from "@/types/chats";
 
 interface ChatsUsersListProps {
-  setActiveChat: (id: string) => void;
+  setActiveChat: any;
   conversations: FullConversationType[];
   currentUser: User;
 }

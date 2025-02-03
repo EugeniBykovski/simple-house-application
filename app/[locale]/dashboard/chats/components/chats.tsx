@@ -7,6 +7,7 @@ import ChatsUsersList from "./chats-users-list";
 import ChatList from "./chat-list";
 import ConversationHeader from "./conversation-header";
 import { FullConversationType, FullMessageType } from "@/types/chats";
+import ChatForm from "./chat-form";
 
 interface ChatsProps {
   currentUser: User;
@@ -16,11 +17,15 @@ interface ChatsProps {
   messages: FullMessageType[];
 }
 
-const Chats: FC<ChatsProps> = ({ currentUser, conversations }) => {
+const Chats: FC<ChatsProps> = ({ currentUser, conversations, messages }) => {
   const [activeChat, setActiveChat] = useState<string | null>(null);
   const selectedConversation = conversations.find(
     (conversation) => conversation.id === activeChat
   );
+
+  const recipientIdConversation =
+    selectedConversation?.participants.find((u) => u.id !== currentUser.id)
+      ?.id || null;
 
   return (
     <div className="flex flex-col gap-4 w-full items-center h-full">
@@ -32,18 +37,19 @@ const Chats: FC<ChatsProps> = ({ currentUser, conversations }) => {
             conversations={conversations}
             currentUser={currentUser}
           />
-          <div className="bg-neutral-50 w-full px-2 py-6 flex flex-col justify-start rounded-lg shadow-md">
+          <div className="bg-neutral-50 w-full px-2 py-6 flex flex-col justify-start relative rounded-lg shadow-md">
             <ConversationHeader
               currentUser={currentUser}
               conversation={selectedConversation ?? null}
             />
             {selectedConversation ? (
-              <ChatList conversations={conversations} />
+              <ChatList conversations={conversations} messages={messages} />
             ) : (
               <p className="text-gray-500 text-sm flex justify-center h-full items-center">
                 Select a chat to start a conversation
               </p>
             )}
+            <ChatForm recipientId={recipientIdConversation} />
           </div>
         </div>
       </div>

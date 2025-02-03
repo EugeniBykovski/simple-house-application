@@ -4,42 +4,49 @@ import { FC, useEffect, useState } from "react";
 import axios from "axios";
 import useConversation from "@/hooks/use-conversation";
 import ConversationBox from "./conversation-box";
-import { FullConversationType } from "@/types/chats";
+import { FullConversationType, FullMessageType } from "@/types/chats";
 
 interface ChatListProps {
   conversations: FullConversationType[];
+  messages: FullMessageType[];
 }
 
-const ChatList: FC<ChatListProps> = ({ conversations }) => {
+const ChatList: FC<ChatListProps> = ({ conversations, messages }) => {
   const [chatConversations, setChatConversations] =
     useState<FullConversationType[]>(conversations);
-  const { conversationId } = useConversation();
+  const { conversationId, setConversationId } = useConversation();
+  const [_, setMessages] = useState<FullMessageType[]>([]);
 
-  const selectedConversation = chatConversations.find(
-    (conv) => conv.id === conversationId
-  );
+  useEffect(() => {
+    if (!conversationId && conversations.length > 0) {
+      setConversationId(conversations[0].id);
+    }
+  }, [conversationId, conversations, setConversationId]);
 
   useEffect(() => {
     if (!conversationId) return;
 
     axios
-      .get<{ conversations: FullConversationType[] }>(
-        `/api/conversations/${conversationId}`
-      )
-      .then((response) => setChatConversations(response.data.conversations))
-      .catch((error) => console.error("Error loading messages:", error));
+      .get<{ messages: FullMessageType[] }>(`/api/messages/${conversationId}`)
+      .then((response) => {
+        setMessages(response.data.messages);
+      })
+      .catch((error) => console.error("❌ Error loading messages:", error));
   }, [conversationId]);
+
+  const selectedConversation = chatConversations.find(
+    (conv) => conv.id === conversationId
+  );
 
   return (
     <div className="w-full flex flex-col items-start p-4">
       {selectedConversation ? (
         <ConversationBox
           key={selectedConversation.id}
-          conversationId={selectedConversation.id}
-          conversation={selectedConversation}
+          initialMessages={messages}
         />
       ) : (
-        <p>No messages yet</p>
+        <p className="text-gray-500 text-sm">No messages yet</p>
       )}
     </div>
   );
