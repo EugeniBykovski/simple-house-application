@@ -38,7 +38,7 @@ export const EntrancesList: FC<{
                     <h4 className="text-center font-semibold text-zinc-400">
                       Floor - {floor as string}
                     </h4>
-                    <div className="grid grid-cols-2 gap-4 mt-4">
+                    <div className="grid grid-cols-2 gap-8 mt-4">
                       {apartmentsOnFloor.length > 0 ? (
                         apartmentsOnFloor.map((apartment: any) => (
                           <ApartmentCard

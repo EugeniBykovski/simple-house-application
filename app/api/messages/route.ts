@@ -2,18 +2,22 @@ import getCurrentUser from "@/app/actions/get-current-user";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { conversationId: string } }
-) {
+export async function GET(request: Request) {
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser?.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    const url = new URL(request.url);
+    const conversationId = url.searchParams.get("conversationId");
+
+    if (!conversationId) {
+      return new NextResponse("Missing conversationId", { status: 400 });
+    }
+
     const messages = await db.message.findMany({
-      where: { conversationId: params.conversationId },
+      where: { conversationId },
       include: {
         sender: true,
         seenBy: { include: { user: true } },
@@ -21,8 +25,9 @@ export async function GET(
       orderBy: { createdAt: "asc" },
     });
 
-    return NextResponse.json({ messages });
+    return NextResponse.json(messages);
   } catch (error) {
+    console.error("Error fetching messages:", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

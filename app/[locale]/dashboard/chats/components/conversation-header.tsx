@@ -35,7 +35,7 @@ const ConversationHeader: FC<ConversationHeaderProps> = ({
       <div className="flex gap-3 items-center">
         <UserAvatar profileImage={otherUser?.image} className="w-10 h-10" />
         <span className="font-bold text-sm text-zinc-600">
-          {conversation.name ?? "Direct Chat"}
+          {conversation.name ?? "Private chat"}
         </span>
         <div className="flex gap-x-1 text-xs">
           (<span>{otherUser?.username}</span>

@@ -5,8 +5,7 @@ import getCurrentUser from "@/app/actions/get-current-user";
 import getUsers from "@/app/actions/get-users";
 import getConversations from "@/app/actions/get-conversations";
 import getConversationById from "@/app/actions/get-conversation-id";
-import getMessages from "@/app/actions/get-messages";
-import { FullConversationType, FullMessageType } from "@/types/chats";
+import { FullConversationType } from "@/types/chats";
 
 const ChatsPage: FC = async () => {
   const currentUser = await getCurrentUser();
@@ -17,9 +16,6 @@ const ChatsPage: FC = async () => {
   const conversation = conversationId
     ? await getConversationById(conversationId)
     : null;
-  const messages: FullMessageType[] = conversationId
-    ? await getMessages(conversationId)
-    : [];
 
   return (
     <>
@@ -32,8 +28,6 @@ const ChatsPage: FC = async () => {
             currentUser={currentUser}
             users={users}
             conversations={conversations}
-            conversation={conversation}
-            messages={messages}
           />
         )}
       </main>

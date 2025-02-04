@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { User } from "@prisma/client";
 import ChatsTitles from "./chats-titles";
 import ChatsUsersList from "./chats-users-list";
@@ -13,19 +13,48 @@ interface ChatsProps {
   currentUser: User;
   users: User[];
   conversations: FullConversationType[];
-  conversation?: FullConversationType | null;
-  messages: FullMessageType[];
 }
 
-const Chats: FC<ChatsProps> = ({ currentUser, conversations, messages }) => {
+const Chats: FC<ChatsProps> = ({ currentUser, conversations }) => {
   const [activeChat, setActiveChat] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User>(currentUser);
+  const [messages, setMessages] = useState<FullMessageType[]>([]);
+
+  useEffect(() => {
+    if (!activeChat && conversations.length > 0) {
+      setActiveChat(conversations[0].id); // Устанавливаем первый чат активным
+      const firstParticipant = conversations[0].participants.find(
+        (user) => user.id !== currentUser.id
+      );
+      if (firstParticipant) {
+        setSelectedUser(firstParticipant);
+      }
+    }
+  }, [activeChat, conversations, currentUser]);
+
   const selectedConversation = conversations.find(
     (conversation) => conversation.id === activeChat
   );
 
-  const recipientIdConversation =
-    selectedConversation?.participants.find((u) => u.id !== currentUser.id)
-      ?.id || null;
+  const fetchMessages = async (conversationId: string) => {
+    try {
+      const response = await fetch(
+        `/api/messages?conversationId=${conversationId}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data);
+      }
+    } catch (error) {
+      console.error("Failed to load messages:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (activeChat) {
+      fetchMessages(activeChat);
+    }
+  }, [activeChat]);
 
   return (
     <div className="flex flex-col gap-4 w-full items-center h-full">
@@ -36,6 +65,7 @@ const Chats: FC<ChatsProps> = ({ currentUser, conversations, messages }) => {
             setActiveChat={setActiveChat}
             conversations={conversations}
             currentUser={currentUser}
+            setCurrentUser={setSelectedUser}
           />
           <div className="bg-neutral-50 w-full px-2 py-6 flex flex-col justify-start relative rounded-lg shadow-md">
             <ConversationHeader
@@ -43,13 +73,16 @@ const Chats: FC<ChatsProps> = ({ currentUser, conversations, messages }) => {
               conversation={selectedConversation ?? null}
             />
             {selectedConversation ? (
-              <ChatList conversations={conversations} messages={messages} />
+              <ChatList
+                conversation={selectedConversation}
+                messages={messages}
+              />
             ) : (
               <p className="text-gray-500 text-sm flex justify-center h-full items-center">
                 Select a chat to start a conversation
               </p>
             )}
-            <ChatForm recipientId={recipientIdConversation} />
+            <ChatForm recipientId={selectedUser?.id} />
           </div>
         </div>
       </div>

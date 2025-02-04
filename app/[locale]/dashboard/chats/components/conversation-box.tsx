@@ -1,7 +1,7 @@
 "use client";
 
-import { FC, useState } from "react";
-import { FullConversationType, FullMessageType } from "@/types/chats";
+import { FC, useEffect, useState } from "react";
+import { FullMessageType } from "@/types/chats";
 import MessageBox from "./message-box";
 
 interface ConversationBoxProps {
@@ -9,10 +9,16 @@ interface ConversationBoxProps {
 }
 
 const ConversationBox: FC<ConversationBoxProps> = ({ initialMessages }) => {
-  const [messages, setMessages] = useState<FullMessageType[]>(initialMessages);
+  const [messages, setMessages] = useState<FullMessageType[]>(
+    initialMessages || []
+  );
+
+  useEffect(() => {
+    setMessages(initialMessages || []);
+  }, [initialMessages]);
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full flex flex-col p-4 space-y-2 overflow-auto h-[37rem]">
       {messages.length > 0 ? (
         messages.map((msg, i) => (
           <MessageBox

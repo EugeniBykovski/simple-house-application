@@ -13,23 +13,28 @@ interface ChatsUserBoxProps {
   conversation: FullConversationType;
   setActiveChat: (id: string) => void;
   currentUser: User;
+  setCurrentUser: (user: User) => void;
 }
 
 const ChatsUserBox: FC<ChatsUserBoxProps> = ({
   setActiveChat,
   conversation,
   currentUser,
+  setCurrentUser,
 }) => {
   const session = useSession();
   const userEmail = session.data?.user?.email || "";
 
-  const handleClick = useCallback(() => {
-    setActiveChat(conversation.id);
-  }, [conversation.id, setActiveChat]);
-
   const otherParticipant = useMemo(() => {
     return conversation.participants.find((user) => user.id !== currentUser.id);
   }, [conversation.participants, currentUser]);
+
+  const handleClick = useCallback(() => {
+    setActiveChat(conversation.id);
+    if (otherParticipant) {
+      setCurrentUser(otherParticipant);
+    }
+  }, [conversation.id, setActiveChat, otherParticipant, setCurrentUser]);
 
   const lastMessage = useMemo(() => {
     if (!conversation.messages || conversation.messages.length === 0) {

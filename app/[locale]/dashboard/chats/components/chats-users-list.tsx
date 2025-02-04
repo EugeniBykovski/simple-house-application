@@ -9,12 +9,14 @@ interface ChatsUsersListProps {
   setActiveChat: any;
   conversations: FullConversationType[];
   currentUser: User;
+  setCurrentUser: (user: User) => void;
 }
 
 const ChatsUsersList: FC<ChatsUsersListProps> = ({
   setActiveChat,
   conversations,
   currentUser,
+  setCurrentUser,
 }) => {
   return (
     <div className="w-[20%] flex-col rounded-lg bg-zinc-50 py-6 px-2 flex justify-start gap-1 shadow-md text-sm text-zinc-600">
@@ -25,6 +27,7 @@ const ChatsUsersList: FC<ChatsUsersListProps> = ({
             conversation={conversation}
             setActiveChat={setActiveChat}
             currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
           />
         ))
       ) : (

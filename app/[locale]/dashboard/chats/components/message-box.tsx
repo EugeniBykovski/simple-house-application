@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { FullMessageType } from "@/types/chats";
 import clsx from "clsx";
@@ -13,7 +13,7 @@ interface MessageBoxProps {
 
 const MessageBox: FC<MessageBoxProps> = ({ data, isLast }) => {
   const session = useSession();
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   if (!data || !data.sender) {
     return null;
@@ -33,6 +33,10 @@ const MessageBox: FC<MessageBoxProps> = ({ data, isLast }) => {
     data?.image ? "rounded-md p-0" : "rounded-full py-2 px-3"
   );
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
   return (
     <div className={container}>
       <div className={body}>
@@ -48,6 +52,7 @@ const MessageBox: FC<MessageBoxProps> = ({ data, isLast }) => {
           <div>{data.body}</div>
         </div>
       </div>
+      <div ref={messagesEndRef} />
     </div>
   );
 };
