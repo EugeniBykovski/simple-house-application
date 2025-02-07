@@ -15,11 +15,24 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ArrowRightLeft, LogOutIcon, Palette, Settings2 } from "lucide-react";
+import {
+  ArrowRightLeft,
+  GalleryVerticalEnd,
+  LogOutIcon,
+  Palette,
+  PanelRightClose,
+  Settings2,
+} from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 
-export const Bottom = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
+export const Bottom = ({
+  toggleSidebar,
+  toggleOptionsSidebar,
+}: {
+  toggleSidebar: () => void;
+  toggleOptionsSidebar: () => void;
+}) => {
   const t = useTranslations("sidebar");
 
   const lang = useLocale();
@@ -34,18 +47,16 @@ export const Bottom = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div>
-              <LocaleSwitcher
-                textSize="text-lg"
-                alignHover="start"
-                alignDropdown="start"
-                variant={"ghost"}
-                size={"icon"}
-              />
-            </div>
+            <Button
+              onClick={toggleOptionsSidebar}
+              variant={"ghost"}
+              size={"icon"}
+            >
+              <PanelRightClose />
+            </Button>
           </TooltipTrigger>
           <TooltipContent side="right">
-            <span>{t("MAIN.CHANGE_LANG_HOVER")}</span>
+            <span>{t("MAIN.OPEN_CLOSE_SIDEBAR_BOTTOM_HOVER")}</span>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -102,6 +113,24 @@ export const Bottom = ({ toggleSidebar }: { toggleSidebar: () => void }) => {
           </TooltipTrigger>
           <TooltipContent side="right">
             <span>{t("MAIN.CHANGE_THEMES")}</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div>
+              <LocaleSwitcher
+                textSize="text-lg"
+                alignHover="start"
+                alignDropdown="start"
+                variant={"ghost"}
+                size={"icon"}
+              />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            <span>{t("MAIN.CHANGE_LANG_HOVER")}</span>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

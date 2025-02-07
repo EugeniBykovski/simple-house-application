@@ -14,8 +14,9 @@ export const SignDocuments: FC = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="p-2 rounded-lg mr-2 cursor-pointer transition">
-          <FileCheck className="text-green-400" />
+        <div className="p-2 rounded-lg mr-2 cursor-pointer transition flex items-center gap-1 sm:gap-2 text-zinc-500 hover:text-zinc-400">
+          <FileCheck className="w-5 h-5" />
+          <p className="text-sm">Sign docs</p>
         </div>
       </DialogTrigger>
       <DialogContent className="flex flex-col items-center w-[70vw] max-w-[70vw] h-[80vh]">

@@ -6,9 +6,13 @@ import { useState } from "react";
 
 interface ShortcutSidebarProps {
   userWorkspaces: Workspace[];
+  toggleOptionsSidebar: () => void;
 }
 
-export const ShortcutSidebar = ({ userWorkspaces }: ShortcutSidebarProps) => {
+export const ShortcutSidebar = ({
+  userWorkspaces,
+  toggleOptionsSidebar,
+}: ShortcutSidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
@@ -23,7 +27,10 @@ export const ShortcutSidebar = ({ userWorkspaces }: ShortcutSidebarProps) => {
           <Top isCollapsed={isCollapsed} />
         </div>
       </ScrollArea>
-      <Bottom toggleSidebar={toggleSidebar} />
+      <Bottom
+        toggleSidebar={toggleSidebar}
+        toggleOptionsSidebar={toggleOptionsSidebar}
+      />
     </div>
   );
 };

@@ -56,12 +56,15 @@ export const DashboardHeader = async ({
       </div>
       <div className="flex items-center gap-1 sm:gap-2">
         <div className="flex flex-wrap items-center gap-0.5 sm:gap-1">
+          {children}
           <SignDocuments />
           <MeetingsTrigger />
           <Billing />
-          {children}
-          <div className="p-2 rounded-lg mr-2 cursor-pointer transition">
-            <BellRing className="text-red-500 hover:text-red-400 transition cursor-pointer" />
+          <div className="p-2 rounded-lg mr-2 cursor-pointer transition relative">
+            <BellRing className="w-5 h-5 text-orange-400 hover:text-orange-300 transition cursor-pointer" />
+            <div className="w-4 h-4 flex justify-center items-center bg-orange-400 absolute rounded-full -right-2 -top-1">
+              <span className="text-[9px] text-white">1</span>
+            </div>
           </div>
         </div>
         <User

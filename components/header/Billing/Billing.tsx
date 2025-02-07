@@ -6,11 +6,15 @@ const Billing = () => {
     <div className="p-2 rounded-lg mr-2 cursor-pointer transition">
       <Link
         href={"/dashboard/settings/billing"}
-        className="
-    relative"
+        className="flex items-center gap-1 text-zinc-500 hover:text-zinc-400 transition"
       >
-        <span className="w-2 h-2 bg-green-500 absolute rounded-full -right-1 -top-[6px]"></span>
-        <CreditCard className="text-zinc-500 hover:text-zinc-400 transition" />
+        <CreditCard className="w-5 h-5" />
+        <p className="text-sm relative">
+          Purchases
+          <div className="w-4 h-4 flex justify-center items-center bg-orange-500 absolute rounded-full -right-2 -top-3">
+            <span className="text-[9px] text-white">1</span>
+          </div>
+        </p>
       </Link>
     </div>
   );

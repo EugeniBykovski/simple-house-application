@@ -5,6 +5,7 @@ import { Workspace } from "@prisma/client";
 import { CloseSidebar } from "./CloseSidebar";
 import { ShortcutSidebar } from "./shortcutSidebar/ShortcutSidebar";
 import { OptionsSidebar } from "./optionsSidebar/OptionsSidebar";
+import { useState } from "react";
 
 interface Props {
   userWorkspaces: Workspace[];
@@ -18,6 +19,11 @@ export const SidebarContainer = ({
   userAdminWorkspaces,
 }: Props) => {
   const { isOpen, setIsOpen } = useToggleSidebar();
+  const [isOptionsOpen, setIsOptionsOpen] = useState(true);
+
+  const toggleOptionsSidebar = () => {
+    setIsOptionsOpen((prev) => !prev);
+  };
 
   return (
     <>
@@ -28,12 +34,22 @@ export const SidebarContainer = ({
       >
         <ShortcutSidebar
           userWorkspaces={userWorkspaces ? userWorkspaces : []}
+          toggleOptionsSidebar={toggleOptionsSidebar}
         />
-        <OptionsSidebar
-        // createdWorkspaces={}
-        // userAdminWorkspaces={userAdminWorkspaces}
-        // userWorkspaces={userWorkspaces}
-        />
+
+        <div
+          className={`transition-all duration-300 ease-in-out ${
+            isOptionsOpen
+              ? "opacity-100 max-w-full"
+              : "opacity-0 max-w-0 overflow-hidden"
+          }`}
+        >
+          <OptionsSidebar
+          // createdWorkspaces={}
+          // userAdminWorkspaces={userAdminWorkspaces}
+          // userWorkspaces={userWorkspaces}
+          />
+        </div>
         <CloseSidebar />
       </aside>
       <div
