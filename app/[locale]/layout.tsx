@@ -11,7 +11,6 @@ import { getMessages } from "next-intl/server";
 import { AuthProvider } from "@/providers/AuthProvider/AuthProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryProvider } from "@/providers/QueryProvider/QueryProvider";
-import { useOnlineStatus } from "@/hooks/use-online-status";
 import { OnlineStatusProvider } from "@/providers/OnlineStatusProvider/OnlineStatusProvider";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
