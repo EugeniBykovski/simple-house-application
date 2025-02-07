@@ -11,6 +11,8 @@ import { SignDocuments } from "../SignDocuments/SignDocuments";
 import { MeetingsTrigger } from "../MeetingsTrigger/MeetingsTrigger";
 import { Logo } from "@/components/common/Logo/Logo";
 import { Separator } from "@/components/ui/separator";
+import Billing from "../Billing/Billing";
+import { BellRing } from "lucide-react";
 
 export const DashboardHeader = async ({
   addManualRoutes,
@@ -56,8 +58,11 @@ export const DashboardHeader = async ({
         <div className="flex flex-wrap items-center gap-0.5 sm:gap-1">
           <SignDocuments />
           <MeetingsTrigger />
+          <Billing />
           {children}
-          <div>Notifications</div>
+          <div className="p-2 rounded-lg mr-2 cursor-pointer transition">
+            <BellRing className="text-red-500 hover:text-red-400 transition cursor-pointer" />
+          </div>
         </div>
         <User
           profileImage={session?.user.image}

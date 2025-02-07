@@ -22,7 +22,7 @@ const Chats: FC<ChatsProps> = ({ currentUser, conversations }) => {
 
   useEffect(() => {
     if (!activeChat && conversations.length > 0) {
-      setActiveChat(conversations[0].id); // Устанавливаем первый чат активным
+      setActiveChat(conversations[0].id);
       const firstParticipant = conversations[0].participants.find(
         (user) => user.id !== currentUser.id
       );

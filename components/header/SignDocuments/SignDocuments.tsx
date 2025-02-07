@@ -14,7 +14,7 @@ export const SignDocuments: FC = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="border-2 p-2 rounded-lg border-dashed mr-2 cursor-pointer hover:border-green-300 transition">
+        <div className="p-2 rounded-lg mr-2 cursor-pointer transition">
           <FileCheck className="text-green-400" />
         </div>
       </DialogTrigger>
