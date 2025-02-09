@@ -23,13 +23,14 @@ model User {
   paymentDetails  PaymentDetails? 
   completedOnboarding Boolean   @default(false)
   accounts      Account[]
-  messages  Message[]
+  messages      Message[]
   sessions      Session[]
   createdWorkspaces Workspace[] @relation("CreatedBy")
   subscriptions Subscription[]
   isOnline      Boolean         @default(false)
   apartmentId   String?   
   apartment     Apartment?  @relation(fields: [apartmentId], references: [id])
+  userApartments UserApartment[]
   contractCode  String?
 
   conversationIds  String[]  @default(cuid())
@@ -41,6 +42,15 @@ model User {
   PomodoroSettings PomodoroSettings[]
   AdvertMessage AdvertMessage[]
   calendarEvent CalendarEvent[]
+}
+
+model UserApartment {
+  userId      String
+  apartmentId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  apartment   Apartment @relation(fields: [apartmentId], references: [id], onDelete: Cascade)
+
+  @@id([userId, apartmentId])
 }
 
 model Conversation {
@@ -129,17 +139,19 @@ model House {
   id        String      @id @default(cuid())
   street    String
   houseNumber String
+  createdBy   String?
   entrances Entrance[]
 
   @@unique([street, houseNumber])
 }
 
 model Entrance {
-  id          String       @id @default(cuid())
-  houseId     String
+  id             String       @id @default(cuid())
+  houseId        String
   entranceNumber String
-  house       House         @relation(fields: [houseId], references: [id], onDelete: Cascade)
-  apartments  Apartment[]
+  createdBy      String?
+  house          House         @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  apartments     Apartment[]
 
   @@unique([houseId, entranceNumber])
 }
@@ -149,11 +161,13 @@ model Apartment {
   entranceId     String
   apartmentNumber String
   floor          String? 
+  createdBy      String?
   entrance       Entrance      @relation(fields: [entranceId], references: [id], onDelete: Cascade)
-  users          User[]
+  userApartments UserApartment[]
 
   @@unique([entranceId, apartmentNumber])
   calendarEvent CalendarEvent[]
+  User User[]
 }
 
 model Workspace {

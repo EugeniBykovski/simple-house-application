@@ -41,7 +41,7 @@ export async function POST(request: Request) {
           where: { entranceNumber: address.entranceNumber },
           include: {
             apartments: {
-              include: { users: true },
+              include: { User: true },
             },
           },
         },
@@ -125,7 +125,7 @@ export async function POST(request: Request) {
         },
       });
 
-      const firstUser = entrance.apartments[0]?.users[0];
+      const firstUser = entrance.apartments[0]?.User[0];
 
       if (!firstUser) {
         workspace = await db.workspace.create({

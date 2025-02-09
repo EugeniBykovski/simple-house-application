@@ -49,9 +49,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         const user = await db.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
+          where: { email: credentials.email },
         });
 
         if (!user || !user?.hashedPassword) {
@@ -64,9 +62,7 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!passwordMatch) {
-          throw new Error(
-            "The entered password is incorrect, please enter the correct one."
-          );
+          throw new Error("Incorrect password, please try again.");
         }
 
         return user;
@@ -85,13 +81,29 @@ export const authOptions: NextAuthOptions = {
         session.user.surname = token.surname;
         session.user.completedOnboarding = !!token.completedOnboarding;
         session.user.isOnline = !!token.isOnline;
+        session.user.apartments = Array.isArray(token.apartments)
+          ? token.apartments
+          : [];
         session.user.workspaceId =
           typeof token.workspaceId === "string" ? token.workspaceId : null;
       }
 
       const user = await db.user.findUnique({
         where: { id: token.id as string },
-        include: { subscriptions: true },
+        include: {
+          subscriptions: true,
+          userApartments: {
+            include: {
+              apartment: {
+                include: {
+                  entrance: {
+                    include: { house: true },
+                  },
+                },
+              },
+            },
+          },
+        },
       });
 
       if (user) {
@@ -99,6 +111,7 @@ export const authOptions: NextAuthOptions = {
         session.user.completedOnboarding = user.completedOnboarding;
         session.user.username = user.username;
         session.user.isOnline = user.isOnline;
+        session.user.apartments = user.userApartments.map((ua) => ua.apartment);
 
         const subscription = user.subscriptions[0];
         if (subscription) {
@@ -108,11 +121,25 @@ export const authOptions: NextAuthOptions = {
 
       return session;
     },
+
     async jwt({ token, user }) {
       if (user) {
         const dbUser = await db.user.findFirst({
           where: { email: token.email },
-          include: { subscriptions: true },
+          include: {
+            subscriptions: true,
+            userApartments: {
+              include: {
+                apartment: {
+                  include: {
+                    entrance: {
+                      include: { house: true },
+                    },
+                  },
+                },
+              },
+            },
+          },
         });
 
         if (!dbUser) {
@@ -134,6 +161,7 @@ export const authOptions: NextAuthOptions = {
             picture: dbUser.image,
             isOnline: true,
             workspaceId: subscription ? subscription.workspaceId : null,
+            apartments: dbUser.userApartments.map((ua) => ua.apartment),
           };
         }
 

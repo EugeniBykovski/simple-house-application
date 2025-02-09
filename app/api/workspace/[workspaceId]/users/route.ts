@@ -33,11 +33,9 @@ export async function GET(
           some: {
             apartments: {
               some: {
-                users: {
+                User: {
                   some: {
-                    id: {
-                      in: workspace.subscribers.map((sub) => sub.userId),
-                    },
+                    id: { in: workspace.subscribers.map((s) => s.userId) },
                   },
                 },
               },
@@ -49,7 +47,7 @@ export async function GET(
         entrances: {
           include: {
             apartments: {
-              include: { users: true },
+              include: { User: true },
             },
           },
         },

@@ -9,6 +9,7 @@ export const availableRoutesWithTranslation = [
   "billing",
   "adverts",
   "paymentDetails",
+  "apartments",
 ];
 
 export interface BreadcrumbProps {

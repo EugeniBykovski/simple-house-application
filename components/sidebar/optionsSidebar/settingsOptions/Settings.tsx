@@ -3,6 +3,7 @@
 import ActiveLink from "@/components/ui/active-link";
 import { Workspace } from "@prisma/client";
 import {
+  HousePlus,
   LockKeyhole,
   PencilLine,
   ReceiptText,
@@ -44,6 +45,11 @@ const settingsFields = [
     href: "/dashboard/settings/paymentDetails",
     icon: <ReceiptText size={20} />,
     title: "SETTINGS.PAYMENT_DETAILS",
+  },
+  {
+    href: "/dashboard/settings/apartments",
+    icon: <HousePlus size={20} />,
+    title: "SETTINGS.APARTMENTS",
   },
 ];
 

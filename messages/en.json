@@ -264,6 +264,7 @@
     "BILLING": "Billing",
     "ADVERTS": "Adverts",
     "PAYMENTDETAILS": "PaymentDetails",
+    "APARTMENTS": "Apartments",
     "TASKS": "Tasks",
     "UNTITLED": "Untitled",
     "POMODORO": "Pomodoro",
@@ -299,7 +300,8 @@
       "BILLING": "Billing",
       "ADVERTS": "Adverts",
       "PAYMENT_DETAILS": "Payment Details",
-      "WORKSPACE": "Workspace"
+      "WORKSPACE": "Workspace",
+      "APARTMENTS": "Apartments"
     },
     "POMODORO": {
       "TIMER": "Timer",

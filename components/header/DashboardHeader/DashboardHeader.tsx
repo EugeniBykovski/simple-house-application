@@ -72,6 +72,7 @@ export const DashboardHeader = async ({
           username={session.user.username!}
           email={session.user.email!}
           isOnline={session.user.isOnline}
+          apartments={session.user.apartments || []}
         />
       </div>
     </header>

@@ -17,6 +17,7 @@ declare module "next-auth" {
       completedOnboarding: boolean;
       surname?: string | null;
       isOnline?: boolean;
+      apartments?: any[];
       workspaceId?: string | null;
     };
   }

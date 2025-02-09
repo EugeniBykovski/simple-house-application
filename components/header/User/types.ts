@@ -3,6 +3,7 @@ export interface UserProps {
   username: string;
   email: string;
   isOnline?: boolean;
+  apartments: any[];
 }
 
 export interface UserData {

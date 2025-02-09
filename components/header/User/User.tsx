@@ -40,15 +40,26 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useCopyToClipboard } from "@/hooks/use-copy-clipboard";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const User = ({
   profileImage,
   username,
   email,
   isOnline: initialIsOnline,
+  apartments,
 }: UserProps) => {
   const t = useTranslations("common");
 
+  const [selectedApartment, setSelectedApartment] = useState<
+    string | undefined
+  >(apartments?.[0]?.id || undefined);
   const [isOnline, setIsOnline] = useState(initialIsOnline);
 
   const lang = useLocale();
@@ -139,6 +150,7 @@ export const User = ({
           )}
         </div>
 
+        {/* !TODO: implement select for change user apparts */}
         <div className="flex items-center gap-1 px-2">
           {profileImage ? (
             <Image
@@ -151,6 +163,7 @@ export const User = ({
           ) : (
             <UserAvatar className="w-8 h-8" />
           )}
+
           <div className="py-1">
             <div className="flex items-center gap-1">
               <DropdownMenuLabel className="py-0">{username}</DropdownMenuLabel>
@@ -202,6 +215,22 @@ export const User = ({
             </div>
           </div>
         </div>
+
+        <Select value={selectedApartment} onValueChange={setSelectedApartment}>
+          <SelectTrigger>
+            <SelectValue placeholder="Choose apartments" />
+          </SelectTrigger>
+          <SelectContent>
+            {apartments.map((apartment: any) => (
+              <SelectItem key={apartment.id} value={apartment.id}>
+                {apartment.entrance.house.street},{" "}
+                {apartment.entrance.house.houseNumber},{" "}
+                {apartment.apartmentNumber}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuSub>

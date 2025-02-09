@@ -44,7 +44,7 @@ export const EntrancesList: FC<{
                           <ApartmentCard
                             key={`apartment-${apartment.apartmentNumber}`}
                             apartmentNumber={apartment.apartmentNumber}
-                            users={apartment.users}
+                            users={apartment.User || []}
                             onClick={onApartmentClick}
                           />
                         ))

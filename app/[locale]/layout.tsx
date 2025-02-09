@@ -11,8 +11,8 @@ import { getMessages } from "next-intl/server";
 import { AuthProvider } from "@/providers/AuthProvider/AuthProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryProvider } from "@/providers/QueryProvider/QueryProvider";
-import { useOnlineStatus } from "@/hooks/use-online-status";
 import { OnlineStatusProvider } from "@/providers/OnlineStatusProvider/OnlineStatusProvider";
+import { ApartmentProvider } from "@/context/ApartmentContext";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 const locales = ["en", "ru"];
@@ -50,21 +50,23 @@ export default async function RootLayout(props: {
       <body className={clsx(dmSans.className, "antialiased")}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
-            <QueryProvider>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme={defaultTheme}
-                enableSystem
-                disableTransitionOnChange
-              >
-                <OnlineStatusProvider>
-                  <Toaster />
-                  <main className="w-full min-h-[calc(100vh-3.5rem-1px)] text-center">
-                    {props.children}
-                  </main>
-                </OnlineStatusProvider>
-              </ThemeProvider>
-            </QueryProvider>
+            <ApartmentProvider initialApartments={[]}>
+              <QueryProvider>
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme={defaultTheme}
+                  enableSystem
+                  disableTransitionOnChange
+                >
+                  <OnlineStatusProvider>
+                    <Toaster />
+                    <main className="w-full min-h-[calc(100vh-3.5rem-1px)] text-center">
+                      {props.children}
+                    </main>
+                  </OnlineStatusProvider>
+                </ThemeProvider>
+              </QueryProvider>
+            </ApartmentProvider>
           </AuthProvider>
         </NextIntlClientProvider>
       </body>
