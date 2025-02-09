@@ -1,11 +1,19 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { useApartment } from "@/context/ApartmentContext";
-import { useState, useEffect, useCallback } from "react";
-import { FC } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { ApartmentSchema, apartmentSchema } from "@/schema/apartmentsSchema";
 
-const Apartments: FC = () => {
+const Apartments = () => {
   const apartmentContext = useApartment();
+  const { toast } = useToast();
 
   if (!apartmentContext) {
     return <div>Loading...</div>;
@@ -13,126 +21,120 @@ const Apartments: FC = () => {
 
   const { apartments, addApartment } = apartmentContext;
 
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
-    street: "",
-    houseNumber: "",
-    entranceNumber: "",
-    apartmentNumber: "",
+  const { data, isFetching, refetch } = useQuery({
+    queryKey: ["apartments"],
+    queryFn: async () => {
+      const response = await axios.get("/api/get-user-apartments");
+      return response.data.apartments;
+    },
+    initialData: apartments,
   });
 
-  useEffect(() => {
-    if (apartments.length > 0) {
-      setLoading(false);
-    }
-  }, [apartments]);
+  const form = useForm<ApartmentSchema>({
+    resolver: zodResolver(apartmentSchema),
+    defaultValues: {
+      street: "",
+      houseNumber: "",
+      entranceNumber: "",
+      floor: "",
+      apartmentNumber: "",
+    },
+  });
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  }, []);
-
-  const handleAddApartment = async () => {
-    if (
-      !formData.street ||
-      !formData.houseNumber ||
-      !formData.entranceNumber ||
-      !formData.apartmentNumber
-    ) {
-      setError("Please fill in all fields.");
-      return;
-    }
-
-    try {
-      setError(null);
-
-      const res = await fetch("/api/add-apartments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: ApartmentSchema) => {
+      const response = await axios.post("/api/add-apartments", data);
+      return response.data;
+    },
+    onError: () => {
+      toast({
+        title: "Failed to add apartment",
+        description: "Something went wrong. Please try again later.",
+        variant: "destructive",
+      });
+    },
+    onSuccess: async (newApartment) => {
+      toast({
+        title: "Apartment added successfully",
+        description: "Your apartment has been added.",
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Failed to add apartment");
-      }
+      addApartment(newApartment.apartment);
+      form.reset();
+      await refetch();
+    },
+  });
 
-      const data = await res.json();
-      addApartment(data.apartment);
-
-      setFormData({
-        street: "",
-        houseNumber: "",
-        entranceNumber: "",
-        apartmentNumber: "",
-      });
-    } catch (err: any) {
-      setError(err.message);
-    }
+  const onSubmit = (data: ApartmentSchema) => {
+    mutate(data);
   };
 
   return (
     <main className="py-4 px-6">
-      <h2 className="text-xl font-semibold mb-4">Your Apartments</h2>
+      <h2 className="text-xl font-semibold mb-4">Your Extra Apartments:</h2>
 
-      {loading ? (
-        <p>Loading apartments...</p>
-      ) : (
-        <ul className="list-disc pl-5">
-          {apartments.map((apartment) => (
-            <li key={apartment.id}>
-              {apartment.entrance?.house?.street ?? "Unknown Street"},{" "}
-              {apartment.entrance?.house?.houseNumber ?? "Unknown Number"},
-              Entrance:{" "}
-              {apartment.entrance?.entranceNumber ?? "Unknown Entrance"}, Floor:{" "}
-              {apartment.apartmentNumber ?? "Unknown Apartment"}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+      <div className="list-disc pl-5">
+        {isFetching ? (
+          <p className="text-gray-500">Loading apartments...</p>
+        ) : data.length === 0 ? (
+          <div>No apartments added yet</div>
+        ) : (
+          data.map((apartment: any) => (
+            <div key={apartment.id} className="flex justify-center gap-2">
+              <p>
+                Street: {apartment.entrance?.house?.street ?? "Unknown Street"}
+              </p>
+              <p>
+                House:{" "}
+                {apartment.entrance?.house?.houseNumber ?? "Unknown Number"},
+              </p>
+              <p>
+                Entrance:{" "}
+                {apartment.entrance?.entranceNumber ?? "Unknown Entrance"},
+              </p>
+              <p>Floor: {apartment.floor ?? "Unknown Floor"},</p>
+              <p>
+                Apartment: {apartment.apartmentNumber ?? "Unknown Apartment"}
+              </p>
+            </div>
+          ))
+        )}
+      </div>
 
       <h3 className="mt-6 text-lg font-semibold">Add New Apartment</h3>
-      <div className="grid gap-2 mt-2">
-        <input
-          name="street"
-          placeholder="Street"
-          value={formData.street}
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-        <input
-          name="houseNumber"
-          placeholder="House Number"
-          value={formData.houseNumber}
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-        <input
-          name="entranceNumber"
-          placeholder="Entrance Number"
-          value={formData.entranceNumber}
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-        <input
-          name="apartmentNumber"
-          placeholder="Apartment Number"
-          value={formData.apartmentNumber}
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
-        <button
-          onClick={handleAddApartment}
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid gap-2 mt-2"
         >
-          Add Apartment
-        </button>
-      </div>
+          <Input {...form.register("street")} placeholder="Street" required />
+          <Input
+            {...form.register("houseNumber")}
+            placeholder="House Number"
+            required
+          />
+          <Input
+            {...form.register("entranceNumber")}
+            placeholder="Entrance Number"
+            required
+          />
+          <Input
+            {...form.register("floor")}
+            placeholder="Floor Number"
+            required
+          />
+          <Input
+            {...form.register("apartmentNumber")}
+            placeholder="Apartment Number"
+            required
+          />
+
+          <Button type="submit" size="sm" disabled={isPending}>
+            {isPending ? "Adding..." : "Add Apartment"}
+          </Button>
+        </form>
+      </Form>
     </main>
   );
 };

@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { signUpSchema } from "@/schema/signUpSchema";
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 export async function POST(request: Request) {
   const body: unknown = await request.json();
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     if (existedUser)
       return NextResponse.json("Email is already taken", { status: 201 });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 12);
     const newUser = await db.user.create({
       data: {
         username,
@@ -43,6 +43,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newUser, { status: 200 });
   } catch (err) {
+    console.error("Registration Error:", err);
     return NextResponse.json("Internal Error", { status: 500 });
   }
 }

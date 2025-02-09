@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.8"
 name: "simple-house-services"
 services:
   db:
@@ -6,13 +6,13 @@ services:
     restart: always
     container_name: simple-house-db
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_DB: "simple-house"
-      POSTGRES_PASSWORD: "password"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - database-data:/var/lib/postgresql-data/
+      - db:/var/lib/postgresql/data
     ports:
       - "8010:5432"
 
 volumes:
-  database-data:
+  db:

@@ -10,61 +10,57 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { street, houseNumber, entranceNumber, apartmentNumber } =
+    const { street, houseNumber, entranceNumber, apartmentNumber, floor } =
       await req.json();
 
-    if (!street || !houseNumber || !entranceNumber || !apartmentNumber) {
+    if (
+      !street ||
+      !houseNumber ||
+      !entranceNumber ||
+      !apartmentNumber ||
+      !floor
+    ) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
       );
     }
 
-    console.log("Adding apartment:", {
-      street,
-      houseNumber,
-      entranceNumber,
-      apartmentNumber,
-    });
-
-    let house = await db.house.findUnique({
+    const house = await db.house.upsert({
       where: { street_houseNumber: { street, houseNumber } },
+      update: {},
+      create: {
+        street,
+        houseNumber,
+        createdBy: session.user.id,
+      },
     });
 
-    if (!house) {
-      house = await db.house.create({
-        data: { street, houseNumber, createdBy: session.user.id },
-      });
-    }
-
-    let entrance = await db.entrance.findUnique({
+    const entrance = await db.entrance.upsert({
       where: { houseId_entranceNumber: { houseId: house.id, entranceNumber } },
+      update: {},
+      create: {
+        houseId: house.id,
+        entranceNumber,
+        createdBy: session.user.id,
+      },
     });
 
-    if (!entrance) {
-      entrance = await db.entrance.create({
-        data: { houseId: house.id, entranceNumber, createdBy: session.user.id },
-      });
-    }
-
-    let apartment = await db.apartment.findUnique({
+    const apartment = await db.apartment.upsert({
       where: {
         entranceId_apartmentNumber: {
           entranceId: entrance.id,
           apartmentNumber,
         },
       },
+      update: {},
+      create: {
+        entranceId: entrance.id,
+        apartmentNumber,
+        floor,
+        createdBy: session.user.id,
+      },
     });
-
-    if (!apartment) {
-      apartment = await db.apartment.create({
-        data: {
-          entranceId: entrance.id,
-          apartmentNumber,
-          createdBy: session.user.id,
-        },
-      });
-    }
 
     const existingUserApartment = await db.userApartment.findUnique({
       where: {
@@ -79,11 +75,13 @@ export async function POST(req: Request) {
       await db.userApartment.create({
         data: { userId: session.user.id, apartmentId: apartment.id },
       });
+    } else {
+      console.log("✅ User already linked to this apartment.");
     }
 
     return NextResponse.json({ message: "Apartment added", apartment });
   } catch (error) {
-    console.error("Error adding apartment:", error);
+    console.error("❌ Error adding apartment:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

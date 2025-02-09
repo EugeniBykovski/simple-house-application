@@ -125,7 +125,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         const dbUser = await db.user.findFirst({
-          where: { email: token.email },
+          where: { email: token.email as string },
           include: {
             subscriptions: true,
             userApartments: {
