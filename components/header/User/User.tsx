@@ -47,19 +47,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useApartment } from "@/context/ApartmentContext";
 
 export const User = ({
   profileImage,
   username,
   email,
   isOnline: initialIsOnline,
-  apartments,
 }: UserProps) => {
   const t = useTranslations("common");
 
-  const [selectedApartment, setSelectedApartment] = useState<
-    string | undefined
-  >(apartments?.[0]?.id || undefined);
+  const { apartments, selectedApartment, switchApartment } = useApartment();
+
   const [isOnline, setIsOnline] = useState(initialIsOnline);
 
   const lang = useLocale();
@@ -150,7 +149,6 @@ export const User = ({
           )}
         </div>
 
-        {/* !TODO: implement select for change user apparts */}
         <div className="flex items-center gap-1 px-2">
           {profileImage ? (
             <Image
@@ -216,16 +214,19 @@ export const User = ({
           </div>
         </div>
 
-        <Select value={selectedApartment} onValueChange={setSelectedApartment}>
+        <Select
+          value={selectedApartment?.id || ""}
+          onValueChange={switchApartment}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Choose apartments" />
           </SelectTrigger>
           <SelectContent>
-            {apartments.map((apartment: any) => (
+            {apartments.map((apartment) => (
               <SelectItem key={apartment.id} value={apartment.id}>
-                {apartment.entrance.house.street},{" "}
-                {apartment.entrance.house.houseNumber},{" "}
-                {apartment.apartmentNumber}
+                {apartment?.entrance?.house?.street || "Unknown Street"},{" "}
+                {apartment?.entrance?.house?.houseNumber || "Unknown Number"},{" "}
+                {apartment?.apartmentNumber || "Unknown Apartment"}
               </SelectItem>
             ))}
           </SelectContent>

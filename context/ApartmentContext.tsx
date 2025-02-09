@@ -11,69 +11,56 @@ interface Apartment {
       houseNumber: string;
     };
   };
+  floor: string;
   apartmentNumber: string;
 }
 
 interface ApartmentContextType {
   selectedApartment: Apartment | null;
-  switchApartment: (apartmentId: string) => Promise<void>;
+  switchApartment: (apartmentId: string) => void;
   apartments: Apartment[];
   addApartment: (newApartment: Apartment) => void;
+  fetchApartments: () => Promise<void>;
 }
 
 const ApartmentContext = createContext<ApartmentContextType | null>(null);
 
-interface ApartmentProviderProps {
-  children: React.ReactNode;
-  initialApartments: Apartment[];
-}
-
 export const ApartmentProvider = ({
   children,
-  initialApartments,
-}: ApartmentProviderProps) => {
+}: {
+  children: React.ReactNode;
+}) => {
   const [selectedApartment, setSelectedApartment] = useState<Apartment | null>(
-    initialApartments?.[0] || null
+    null
   );
-  const [apartments, setApartments] = useState<Apartment[]>(initialApartments);
+  const [apartments, setApartments] = useState<Apartment[]>([]);
+
+  const fetchApartments = async () => {
+    try {
+      const res = await fetch("/api/get-user-apartments");
+      if (!res.ok) throw new Error("Failed to fetch apartments");
+      const data = await res.json();
+
+      setApartments(data.apartments);
+      setSelectedApartment(data.apartments?.[0] || null);
+    } catch (error) {
+      console.error("Error fetching apartments:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchApartments = async () => {
-      try {
-        const res = await fetch("/api/get-user-apartments");
-        if (!res.ok) throw new Error("Failed to fetch apartments");
-        const data = await res.json();
-
-        if (data.apartments.length > 0) {
-          setApartments(data.apartments);
-          setSelectedApartment(data.apartments[0]);
-        }
-      } catch (error) {
-        console.error("Error fetching apartments:", error);
-      }
-    };
-
     fetchApartments();
   }, []);
 
-  const switchApartment = async (apartmentId: string) => {
-    try {
-      const res = await fetch("/api/switch-apartment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ apartmentId }),
-      });
+  const switchApartment = (apartmentId: string) => {
+    setSelectedApartment(
+      apartments.find((apt) => apt.id === apartmentId) || null
+    );
+  };
 
-      if (!res.ok) {
-        console.error("Failed to switch apartment:", await res.json());
-        return;
-      }
-
-      const { apartment } = await res.json();
-      setSelectedApartment(apartment);
-    } catch (error) {
-      console.error("Error switching apartment:", error);
-    }
+  const addApartment = (newApartment: Apartment) => {
+    setApartments((prev) => [...prev, newApartment]);
+    setSelectedApartment(newApartment);
   };
 
   return (
@@ -82,8 +69,8 @@ export const ApartmentProvider = ({
         selectedApartment,
         switchApartment,
         apartments,
-        addApartment: (newApartment) =>
-          setApartments((prev) => [...prev, newApartment]),
+        addApartment,
+        fetchApartments,
       }}
     >
       {children}

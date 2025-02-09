@@ -7,7 +7,7 @@ import { useApartment } from "@/context/ApartmentContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { ApartmentSchema, apartmentSchema } from "@/schema/apartmentsSchema";
 
@@ -19,16 +19,7 @@ const Apartments = () => {
     return <div>Loading...</div>;
   }
 
-  const { apartments, addApartment } = apartmentContext;
-
-  const { data, isFetching, refetch } = useQuery({
-    queryKey: ["apartments"],
-    queryFn: async () => {
-      const response = await axios.get("/api/get-user-apartments");
-      return response.data.apartments;
-    },
-    initialData: apartments,
-  });
+  const { apartments, addApartment, fetchApartments } = apartmentContext;
 
   const form = useForm<ApartmentSchema>({
     resolver: zodResolver(apartmentSchema),
@@ -61,7 +52,7 @@ const Apartments = () => {
 
       addApartment(newApartment.apartment);
       form.reset();
-      await refetch();
+      await fetchApartments();
     },
   });
 
@@ -74,27 +65,25 @@ const Apartments = () => {
       <h2 className="text-xl font-semibold mb-4">Your Extra Apartments:</h2>
 
       <div className="list-disc pl-5">
-        {isFetching ? (
-          <p className="text-gray-500">Loading apartments...</p>
-        ) : data.length === 0 ? (
+        {apartments.length === 0 ? (
           <div>No apartments added yet</div>
         ) : (
-          data.map((apartment: any) => (
+          apartments.map((apartment) => (
             <div key={apartment.id} className="flex justify-center gap-2">
               <p>
-                Street: {apartment.entrance?.house?.street ?? "Unknown Street"}
+                Street: {apartment?.entrance?.house?.street || "Unknown Street"}
               </p>
               <p>
                 House:{" "}
-                {apartment.entrance?.house?.houseNumber ?? "Unknown Number"},
+                {apartment?.entrance?.house?.houseNumber || "Unknown Number"}
               </p>
               <p>
                 Entrance:{" "}
-                {apartment.entrance?.entranceNumber ?? "Unknown Entrance"},
+                {apartment?.entrance?.entranceNumber || "Unknown Entrance"}
               </p>
-              <p>Floor: {apartment.floor ?? "Unknown Floor"},</p>
+              <p>Floor: {apartment?.floor || "Unknown Floor"}</p>
               <p>
-                Apartment: {apartment.apartmentNumber ?? "Unknown Apartment"}
+                Apartment: {apartment?.apartmentNumber || "Unknown Apartment"}
               </p>
             </div>
           ))

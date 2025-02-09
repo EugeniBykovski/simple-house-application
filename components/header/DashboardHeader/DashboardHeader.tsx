@@ -13,6 +13,7 @@ import { Logo } from "@/components/common/Logo/Logo";
 import { Separator } from "@/components/ui/separator";
 import Billing from "../Billing/Billing";
 import { BellRing } from "lucide-react";
+import { useApartment } from "@/context/ApartmentContext";
 
 export const DashboardHeader = async ({
   addManualRoutes,
@@ -72,7 +73,6 @@ export const DashboardHeader = async ({
           username={session.user.username!}
           email={session.user.email!}
           isOnline={session.user.isOnline}
-          apartments={session.user.apartments || []}
         />
       </div>
     </header>
