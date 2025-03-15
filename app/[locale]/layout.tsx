@@ -50,7 +50,7 @@ export default async function RootLayout(props: {
       <body className={clsx(dmSans.className, "antialiased")}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
-            <ApartmentProvider initialApartments={[]}>
+            <ApartmentProvider>
               <QueryProvider>
                 <ThemeProvider
                   attribute="class"

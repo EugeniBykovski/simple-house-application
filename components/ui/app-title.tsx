@@ -8,7 +8,7 @@ interface Props {
   hasLink?: boolean;
 }
 
-export const AppTitle = ({ className, hasLink, size = 20 }: Props) => {
+export const AppTitle = ({ className, hasLink }: Props) => {
   return (
     <>
       {hasLink ? (

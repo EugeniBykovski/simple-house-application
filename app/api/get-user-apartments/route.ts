@@ -9,24 +9,36 @@ export async function GET() {
   }
 
   try {
-    const userApartments = await db.userApartment.findMany({
-      where: { userId: session.user.id },
+    const user = await db.user.findUnique({
+      where: { id: session.user.id },
       include: {
         apartment: {
           include: {
             entrance: { include: { house: true } },
           },
         },
+        userApartments: {
+          include: {
+            apartment: {
+              include: {
+                entrance: { include: { house: true } },
+              },
+            },
+          },
+        },
       },
     });
 
-    if (!userApartments || userApartments.length === 0) {
-      return NextResponse.json({ apartments: [] });
+    if (!user) {
+      return NextResponse.json({ apartments: [], primaryApartment: null });
     }
 
-    const apartments = userApartments.map((ua) => ua.apartment);
-    return NextResponse.json({ apartments });
+    const primaryApartment = user.apartment;
+    const apartments = user.userApartments.map((ua) => ua.apartment);
+
+    return NextResponse.json({ primaryApartment, apartments });
   } catch (error) {
+    console.error("Error fetching apartments:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

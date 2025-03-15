@@ -57,7 +57,12 @@ export const User = ({
 }: UserProps) => {
   const t = useTranslations("common");
 
-  const { apartments, selectedApartment, switchApartment } = useApartment();
+  const { apartments, selectedApartment, switchApartment, primaryApartment } =
+    useApartment();
+
+  const additionalApartments = apartments.filter(
+    (apt) => apt.id !== primaryApartment?.id
+  );
 
   const [isOnline, setIsOnline] = useState(initialIsOnline);
 
@@ -216,17 +221,26 @@ export const User = ({
 
         <Select
           value={selectedApartment?.id || ""}
-          onValueChange={switchApartment}
+          onValueChange={(apartmentId) => {
+            switchApartment(apartmentId);
+          }}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Choose apartments" />
+            <SelectValue placeholder="Choose apartment:" />
           </SelectTrigger>
           <SelectContent>
-            {apartments.map((apartment) => (
+            {primaryApartment && (
+              <SelectItem key={primaryApartment.id} value={primaryApartment.id}>
+                {primaryApartment?.entrance?.house?.street},{" "}
+                {primaryApartment?.entrance?.house?.houseNumber},{" "}
+                {primaryApartment?.apartmentNumber} (Primary)
+              </SelectItem>
+            )}
+            {additionalApartments.map((apartment) => (
               <SelectItem key={apartment.id} value={apartment.id}>
-                {apartment?.entrance?.house?.street || "Unknown Street"},{" "}
-                {apartment?.entrance?.house?.houseNumber || "Unknown Number"},{" "}
-                {apartment?.apartmentNumber || "Unknown Apartment"}
+                {apartment?.entrance?.house?.street},{" "}
+                {apartment?.entrance?.house?.houseNumber},{" "}
+                {apartment?.apartmentNumber}
               </SelectItem>
             ))}
           </SelectContent>

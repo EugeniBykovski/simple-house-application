@@ -16,10 +16,10 @@ interface Apartment {
 }
 
 interface ApartmentContextType {
+  primaryApartment: Apartment | null;
   selectedApartment: Apartment | null;
   switchApartment: (apartmentId: string) => void;
   apartments: Apartment[];
-  addApartment: (newApartment: Apartment) => void;
   fetchApartments: () => Promise<void>;
 }
 
@@ -30,6 +30,9 @@ export const ApartmentProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const [primaryApartment, setPrimaryApartment] = useState<Apartment | null>(
+    null
+  );
   const [selectedApartment, setSelectedApartment] = useState<Apartment | null>(
     null
   );
@@ -41,8 +44,9 @@ export const ApartmentProvider = ({
       if (!res.ok) throw new Error("Failed to fetch apartments");
       const data = await res.json();
 
+      setPrimaryApartment(data.primaryApartment);
       setApartments(data.apartments);
-      setSelectedApartment(data.apartments?.[0] || null);
+      setSelectedApartment(data.primaryApartment || data.apartments[0] || null);
     } catch (error) {
       console.error("Error fetching apartments:", error);
     }
@@ -53,23 +57,18 @@ export const ApartmentProvider = ({
   }, []);
 
   const switchApartment = (apartmentId: string) => {
-    setSelectedApartment(
-      apartments.find((apt) => apt.id === apartmentId) || null
-    );
-  };
-
-  const addApartment = (newApartment: Apartment) => {
-    setApartments((prev) => [...prev, newApartment]);
+    const newApartment =
+      apartments.find((apt) => apt.id === apartmentId) || null;
     setSelectedApartment(newApartment);
   };
 
   return (
     <ApartmentContext.Provider
       value={{
+        primaryApartment,
         selectedApartment,
         switchApartment,
         apartments,
-        addApartment,
         fetchApartments,
       }}
     >
