@@ -13,7 +13,6 @@ import { Logo } from "@/components/common/Logo/Logo";
 import { Separator } from "@/components/ui/separator";
 import Billing from "../Billing/Billing";
 import { BellRing } from "lucide-react";
-import { useApartment } from "@/context/ApartmentContext";
 
 export const DashboardHeader = async ({
   addManualRoutes,
@@ -24,8 +23,23 @@ export const DashboardHeader = async ({
   showingSavingStatus,
   showBackBtn,
 }: DashboardHeaderProps) => {
-  const session = await getAuthSession();
-  if (!session) return null;
+  let session = await getAuthSession();
+
+  if (!session) {
+    session = {
+      expires: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+      user: {
+        id: "fake-user-id",
+        username: "Guest",
+        name: "Guest",
+        surname: "User",
+        email: "guest@example.com",
+        image: null,
+        isOnline: false,
+        completedOnboarding: false,
+      },
+    };
+  }
 
   return (
     <header
@@ -41,10 +55,10 @@ export const DashboardHeader = async ({
         <Welcoming
           hideOnMobile
           hideOnDesktop
-          username={session?.user.username!}
-          name={session?.user.name}
-          surname={session?.user.surname}
+          surname={session.user.username}
+          name={session.user.name}
           showOnlyOnPath="/dashboard"
+          username={session.user.name ?? ""}
         />
         {showBackBtn && <BackButton />}
         {showingSavingStatus && <SavingStatus />}
@@ -69,9 +83,9 @@ export const DashboardHeader = async ({
           </div>
         </div>
         <User
-          profileImage={session?.user.image}
-          username={session.user.username!}
-          email={session.user.email!}
+          profileImage={session.user.image}
+          username={session.user.username ?? "Guest"}
+          email={session.user.email ?? "guest@example.com"}
           isOnline={session.user.isOnline}
         />
       </div>

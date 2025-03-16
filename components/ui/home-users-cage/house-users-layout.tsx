@@ -14,13 +14,25 @@ const HouseUsersLayout: FC<HouseUsersLayoutProps> = ({ session }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const fakeUser = {
+    user: {
+      id: "fake-user-id",
+      name: "Guest User",
+      email: "guest@example.com",
+    },
+  };
+
+  const currentSession = session || fakeUser;
+
   useEffect(() => {
     if (!selectedApartment) return;
 
     const fetchWorkspaceId = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/user/${session.user.id}/workspace`);
+        const res = await fetch(
+          `/api/user/${currentSession.user.id}/workspace`
+        );
         if (!res.ok) throw new Error("Failed to fetch workspace");
         const data = await res.json();
 
@@ -38,7 +50,7 @@ const HouseUsersLayout: FC<HouseUsersLayoutProps> = ({ session }) => {
     };
 
     fetchWorkspaceId();
-  }, [selectedApartment, session.user.id]);
+  }, [selectedApartment]);
 
   if (loading) return <p className="text-center text-gray-400">Loading...</p>;
   if (error) return <p className="text-center text-red-500">{error}</p>;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { createContext, useContext, useState, useEffect } from "react";
 
 interface Apartment {
@@ -38,10 +39,17 @@ export const ApartmentProvider = ({
   );
   const [apartments, setApartments] = useState<Apartment[]>([]);
 
+  const { data: session } = useSession();
+  const token = session?.expires;
+
   const fetchApartments = async () => {
     try {
-      const res = await fetch("/api/get-user-apartments");
+      const res = await fetch("/api/get-user-apartments", {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+
       if (!res.ok) throw new Error("Failed to fetch apartments");
+
       const data = await res.json();
 
       setPrimaryApartment(data.primaryApartment);
@@ -53,8 +61,10 @@ export const ApartmentProvider = ({
   };
 
   useEffect(() => {
-    fetchApartments();
-  }, []);
+    if (session) {
+      fetchApartments();
+    }
+  }, [session]);
 
   const switchApartment = (apartmentId: string) => {
     const newApartment =
